@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.headmostlab.findmovie.model.Repository
 import com.headmostlab.findmovie.model.RepositoryImpl
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
     private val appStateLiveData: MutableLiveData<AppState> = MutableLiveData(),
-    private val repository: Repository = RepositoryImpl()
+    private val repository: Repository = RepositoryImpl(),
+    private val random: Random = Random()
 ) :
     ViewModel() {
 
@@ -19,7 +21,11 @@ class MainViewModel(
         appStateLiveData.value = AppState.Loading
         Thread {
             TimeUnit.SECONDS.sleep(1)
-            appStateLiveData.postValue(AppState.Success(repository.getMovies()))
+            if (random.nextBoolean()) {
+                appStateLiveData.postValue(AppState.Success(repository.getMovies()))
+            } else {
+                appStateLiveData.postValue(AppState.Error(RuntimeException()))
+            }
         }.start()
     }
 }
