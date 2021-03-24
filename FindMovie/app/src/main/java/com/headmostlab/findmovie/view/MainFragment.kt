@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -61,8 +60,8 @@ class MainFragment : Fragment() {
         is AppState.Error -> {
             binding.loadingProgress.visibility = View.INVISIBLE
             Snackbar
-                .make(binding.main, "Error", Snackbar.LENGTH_INDEFINITE)
-                .setAction("Reload") { viewModel.getMovies() }
+                .make(binding.main, getString(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
+                .setAction(getString(R.string.button_reload)) { viewModel.getMovies() }
                 .show()
         }
     }
