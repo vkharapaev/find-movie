@@ -48,8 +48,15 @@ class MainFragment : Fragment() {
     }
 
     private fun renderAppState(state: AppState): Unit = when (state) {
-        AppState.Loading -> Toast.makeText(requireContext(), "LOADING", Toast.LENGTH_SHORT).show()
-        is AppState.Success -> adapter.submitList(state.movies)
+        AppState.Loading -> {
+            binding.loadingProgress.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.INVISIBLE
+        }
+        is AppState.Success -> {
+            adapter.submitList(state.movies)
+            binding.loadingProgress.visibility = View.INVISIBLE
+            binding.recyclerView.visibility = View.VISIBLE
+        }
     }
 
     private fun createDividerDecoration(): DividerItemDecoration {
