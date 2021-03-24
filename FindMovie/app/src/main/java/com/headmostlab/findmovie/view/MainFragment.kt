@@ -9,6 +9,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.viewmodel.AppState
@@ -56,6 +57,13 @@ class MainFragment : Fragment() {
             adapter.submitList(state.movies)
             binding.loadingProgress.visibility = View.INVISIBLE
             binding.recyclerView.visibility = View.VISIBLE
+        }
+        is AppState.Error -> {
+            binding.loadingProgress.visibility = View.INVISIBLE
+            Snackbar
+                .make(binding.main, "Error", Snackbar.LENGTH_INDEFINITE)
+                .setAction("Reload") { viewModel.getMovies() }
+                .show()
         }
     }
 
