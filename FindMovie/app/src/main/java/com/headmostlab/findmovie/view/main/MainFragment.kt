@@ -44,7 +44,6 @@ class MainFragment : Fragment() {
         binding.recyclerView.addItemDecoration(createDividerDecoration())
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
-        viewModel.getMovies()
     }
 
     override fun onDestroyView() {
@@ -67,7 +66,7 @@ class MainFragment : Fragment() {
                 binding.loadingProgress.visibility = View.INVISIBLE
                 Snackbar
                     .make(binding.main, getString(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.button_reload)) { viewModel.getMovies() }
+                    .setAction(getString(R.string.button_reload)) { viewModel.getAppStateLiveData() }
                     .show()
             }
             is MainAppState.OnMovieItemClicked -> {

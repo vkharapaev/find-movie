@@ -18,9 +18,12 @@ class MainViewModel(
 ) :
     ViewModel() {
 
-    fun getAppStateLiveData(): LiveData<MainAppState> = appStateLiveData
+    fun getAppStateLiveData(): LiveData<MainAppState> {
+        loadMovies()
+        return appStateLiveData
+    }
 
-    fun getMovies() {
+    private fun loadMovies() {
         appStateLiveData.value = MainAppState.Loading
         Thread {
             TimeUnit.SECONDS.sleep(1)
