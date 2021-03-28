@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import com.headmostlab.findmovie.databinding.MovieRowItemBinding
 import com.headmostlab.findmovie.model.Movie
 
-class MovieAdapter : ListAdapter<Movie, MovieViewHolder>(DIFF_CALLBACK) {
+class MovieAdapter(private val listener: MainFragment.OnItemClickedListener) :
+    ListAdapter<Movie, MovieViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
         MovieRowItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -15,7 +16,7 @@ class MovieAdapter : ListAdapter<Movie, MovieViewHolder>(DIFF_CALLBACK) {
     )
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(listener, getItem(position))
     }
 
     companion object {

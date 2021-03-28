@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
+import com.headmostlab.findmovie.view.detail.DetailFragment
 import com.headmostlab.findmovie.viewmodel.main.AppState
 import com.headmostlab.findmovie.viewmodel.main.MainViewModel
 
@@ -34,7 +35,11 @@ class MainFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = MovieAdapter()
+        adapter = MovieAdapter(object : OnItemClickedListener {
+            override fun clicked(position: Int) {
+                viewModel.clickMovieItem(position)
+            }
+        })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(createDividerDecoration())
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
@@ -47,23 +52,38 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-    private fun renderAppState(state: AppState): Unit = when (state) {
-        AppState.Loading -> {
-            binding.loadingProgress.visibility = View.VISIBLE
-            binding.recyclerView.visibility = View.INVISIBLE
+    private fun renderAppState(state: AppState): Unit {
+        when (state) {
+            AppState.Loading -> {
+                binding.loadingProgress.visibility = View.VISIBLE
+                binding.recyclerView.visibility = View.INVISIBLE
+            }
+            is AppState.Success -> {
+                adapter.submitList(state.movies)
+                binding.loadingProgress.visibility = View.INVISIBLE
+                binding.recyclerView.visibility = View.VISIBLE
+            }
+            is AppState.Error -> {
+                binding.loadingProgress.visibility = View.INVISIBLE
+                Snackbar
+                    .make(binding.main, getString(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.button_reload)) { viewModel.getMovies() }
+                    .show()
+            }
+            is AppState.OnMovieItemClicked -> {
+                binding.loadingProgress.visibility = View.INVISIBLE
+                binding.recyclerView.visibility = View.VISIBLE
+                val movieId = state.movieId.getContentIfNotHandled()
+                movieId?.let { showDetail(it) }
+            }
         }
-        is AppState.Success -> {
-            adapter.submitList(state.movies)
-            binding.loadingProgress.visibility = View.INVISIBLE
-            binding.recyclerView.visibility = View.VISIBLE
-        }
-        is AppState.Error -> {
-            binding.loadingProgress.visibility = View.INVISIBLE
-            Snackbar
-                .make(binding.main, getString(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.button_reload)) { viewModel.getMovies() }
-                .show()
-        }
+    }
+
+    private fun showDetail(movieId: Int) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, DetailFragment.newInstance(movieId))
+            .addToBackStack("")
+            .commit()
     }
 
     private fun createDividerDecoration(): DividerItemDecoration {
@@ -71,6 +91,10 @@ class MainFragment : Fragment() {
         val drawable = ResourcesCompat.getDrawable(resources, R.drawable.divider, null)
         drawable?.apply { decoration.setDrawable(drawable) }
         return decoration
+    }
+
+    interface OnItemClickedListener {
+        fun clicked(position: Int)
     }
 
 }
