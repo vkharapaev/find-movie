@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.snackbar.Snackbar
+import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
 import com.headmostlab.findmovie.model.FullMovie
@@ -13,6 +15,7 @@ import com.headmostlab.findmovie.model.apimodel.MovieDataSource
 import com.headmostlab.findmovie.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
+import com.headmostlab.findmovie.network.tmdb.TMDbImageHostProvider
 import com.headmostlab.findmovie.viewmodel.detail.DetailAppState
 import com.headmostlab.findmovie.viewmodel.detail.DetailViewModel
 import com.headmostlab.findmovie.viewmodel.detail.DetailViewModelFactory
@@ -77,6 +80,14 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         binding.revenue.text = movie.revenue.toString()
         binding.year.text = movie.year.toString()
         binding.description.text = movie.description
+
+        val hostProvider = TMDbImageHostProvider()
+        val imageUrl = hostProvider.getHostUrl() + movie.poster
+
+        GlideApp.with(this)
+            .load(imageUrl)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(binding.poster)
     }
 
     override fun onDestroyView() {
