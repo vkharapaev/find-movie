@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.view.detail.DetailFragment
-import com.headmostlab.findmovie.viewmodel.main.AppState
+import com.headmostlab.findmovie.viewmodel.main.MainAppState
 import com.headmostlab.findmovie.viewmodel.main.MainViewModel
 
 class MainFragment : Fragment() {
@@ -52,25 +52,25 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-    private fun renderAppState(state: AppState): Unit {
+    private fun renderAppState(state: MainAppState): Unit {
         when (state) {
-            AppState.Loading -> {
+            MainAppState.Loading -> {
                 binding.loadingProgress.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.INVISIBLE
             }
-            is AppState.Success -> {
+            is MainAppState.MoviesLoaded -> {
                 adapter.submitList(state.movies)
                 binding.loadingProgress.visibility = View.INVISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
             }
-            is AppState.Error -> {
+            is MainAppState.LoadingError -> {
                 binding.loadingProgress.visibility = View.INVISIBLE
                 Snackbar
                     .make(binding.main, getString(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.button_reload)) { viewModel.getMovies() }
                     .show()
             }
-            is AppState.OnMovieItemClicked -> {
+            is MainAppState.OnMovieItemClicked -> {
                 binding.loadingProgress.visibility = View.INVISIBLE
                 binding.recyclerView.visibility = View.VISIBLE
                 val movieId = state.movieId.getContentIfNotHandled()

@@ -11,25 +11,25 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainViewModel(
-    private val appStateLiveData: MutableLiveData<AppState> = MutableLiveData(),
+    private val appStateLiveData: MutableLiveData<MainAppState> = MutableLiveData(),
     private val repository: Repository = RepositoryImpl(),
     private val random: Random = Random(),
     private var shortMovies: List<ShortMovie>? = null
 ) :
     ViewModel() {
 
-    fun getAppStateLiveData(): LiveData<AppState> = appStateLiveData
+    fun getAppStateLiveData(): LiveData<MainAppState> = appStateLiveData
 
     fun getMovies() {
-        appStateLiveData.value = AppState.Loading
+        appStateLiveData.value = MainAppState.Loading
         Thread {
             TimeUnit.SECONDS.sleep(1)
             if (random.nextBoolean()) {
                 val movies = repository.getMovies()
                 shortMovies = movies
-                appStateLiveData.postValue(AppState.Success(movies))
+                appStateLiveData.postValue(MainAppState.MoviesLoaded(movies))
             } else {
-                appStateLiveData.postValue(AppState.Error(RuntimeException()))
+                appStateLiveData.postValue(MainAppState.LoadingError(RuntimeException()))
             }
         }.start()
     }
@@ -37,7 +37,7 @@ class MainViewModel(
     fun clickMovieItem(position: Int) {
         val movie = shortMovies?.get(position)
         if (movie != null) {
-            appStateLiveData.value = AppState.OnMovieItemClicked(Event(movie.id))
+            appStateLiveData.value = MainAppState.OnMovieItemClicked(Event(movie.id))
         }
     }
 }
