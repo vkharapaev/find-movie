@@ -4,16 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.headmostlab.findmovie.Event
-import com.headmostlab.findmovie.model.ShortMovie
 import com.headmostlab.findmovie.model.Repository
 import com.headmostlab.findmovie.model.RepositoryImpl
-import java.util.*
-import java.util.concurrent.TimeUnit
+import com.headmostlab.findmovie.model.ShortMovie
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
     private val appStateLiveData: MutableLiveData<MainAppState> = MutableLiveData(),
+    private val disposables: CompositeDisposable = CompositeDisposable(),
     private val repository: Repository = RepositoryImpl(),
-    private val random: Random = Random(),
     private var shortMovies: List<ShortMovie>? = null
 ) :
     ViewModel() {
@@ -24,17 +25,24 @@ class MainViewModel(
     }
 
     private fun loadMovies() {
-        appStateLiveData.value = MainAppState.Loading
-        Thread {
-            TimeUnit.SECONDS.sleep(1)
-            if (random.nextBoolean()) {
-                val movies = repository.getMovies()
-                shortMovies = movies
-                appStateLiveData.postValue(MainAppState.MoviesLoaded(movies))
-            } else {
-                appStateLiveData.postValue(MainAppState.LoadingError(RuntimeException()))
-            }
-        }.start()
+        val data = shortMovies;
+        if (data != null) {
+            appStateLiveData.value = MainAppState.MoviesLoaded(data)
+        } else {
+            appStateLiveData.value = MainAppState.Loading
+            disposables.add(
+                repository.getMovies()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            appStateLiveData.postValue(MainAppState.MoviesLoaded(it))
+                            shortMovies = it
+                        },
+                        { appStateLiveData.postValue(MainAppState.LoadingError(it)) }
+                    )
+            )
+        }
     }
 
     fun clickMovieItem(position: Int) {
@@ -42,5 +50,9 @@ class MainViewModel(
         if (movie != null) {
             appStateLiveData.value = MainAppState.OnMovieItemClicked(Event(movie.id))
         }
+    }
+
+    override fun onCleared() {
+        disposables.clear()
     }
 }

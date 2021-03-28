@@ -6,11 +6,14 @@ import androidx.lifecycle.ViewModel
 import com.headmostlab.findmovie.model.FullMovie
 import com.headmostlab.findmovie.model.Repository
 import com.headmostlab.findmovie.model.RepositoryImpl
-import java.util.concurrent.TimeUnit
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 class DetailViewModel(
     private val repository: Repository = RepositoryImpl(),
     private val appState: MutableLiveData<DetailAppState> = MutableLiveData(),
+    private val disposables: CompositeDisposable = CompositeDisposable(),
     private var movie: FullMovie? = null
 ) : ViewModel() {
 
@@ -26,11 +29,18 @@ class DetailViewModel(
             return
         }
         appState.value = DetailAppState.Loading
-        Thread {
-            TimeUnit.SECONDS.sleep(1)
-            val movie = repository.getMovie(movieId)
-            this.movie = movie
-            appState.postValue(DetailAppState.MovieLoaded(movie))
-        }.start()
+        disposables.add(
+            repository.getMovie(movieId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    this.movie = it
+                    appState.value = DetailAppState.MovieLoaded(it)
+                }, { appState.value = DetailAppState.LoadingError(it) })
+        )
+    }
+
+    override fun onCleared() {
+        disposables.clear()
     }
 }
