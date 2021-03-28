@@ -5,13 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.headmostlab.findmovie.model.FullMovie
 import com.headmostlab.findmovie.model.Repository
-import com.headmostlab.findmovie.model.RepositoryImpl
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class DetailViewModel(
-    private val repository: Repository = RepositoryImpl(),
+    private val repository: Repository,
     private val appState: MutableLiveData<DetailAppState> = MutableLiveData(),
     private val disposables: CompositeDisposable = CompositeDisposable(),
     private var movie: FullMovie? = null

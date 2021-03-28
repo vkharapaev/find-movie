@@ -11,9 +11,15 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
+import com.headmostlab.findmovie.model.RepositoryImpl
+import com.headmostlab.findmovie.model.apimodel.MovieDataSource
+import com.headmostlab.findmovie.network.tmdb.TMDbApi
+import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
+import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.view.detail.DetailFragment
 import com.headmostlab.findmovie.viewmodel.main.MainAppState
 import com.headmostlab.findmovie.viewmodel.main.MainViewModel
+import com.headmostlab.findmovie.viewmodel.main.MainViewModelFactory
 
 class MainFragment : Fragment() {
 
@@ -32,7 +38,14 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
+        val hostProvider = TMDbHostProvider()
+        val apiKeyProvider = TMDbApiKeyProvider()
+        val service = TMDbApi(hostProvider).getService()
+        val dataSource = MovieDataSource(service, apiKeyProvider)
+        val repository = RepositoryImpl(dataSource)
+
+        viewModel = ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(

@@ -8,8 +8,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
 import com.headmostlab.findmovie.model.FullMovie
+import com.headmostlab.findmovie.model.RepositoryImpl
+import com.headmostlab.findmovie.model.apimodel.MovieDataSource
+import com.headmostlab.findmovie.network.tmdb.TMDbApi
+import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
+import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.viewmodel.detail.DetailAppState
 import com.headmostlab.findmovie.viewmodel.detail.DetailViewModel
+import com.headmostlab.findmovie.viewmodel.detail.DetailViewModelFactory
 
 class DetailFragment : Fragment(R.layout.detail_fragment) {
 
@@ -21,7 +27,13 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(DetailViewModel::class.java)
+        val hostProvider = TMDbHostProvider()
+        val apiKeyProvider = TMDbApiKeyProvider()
+        val service = TMDbApi(hostProvider).getService()
+        val dataSource = MovieDataSource(service, apiKeyProvider)
+        val repository = RepositoryImpl(dataSource)
+
+        viewModel = ViewModelProvider(this, DetailViewModelFactory(repository)).get(DetailViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
