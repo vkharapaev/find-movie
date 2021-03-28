@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.headmostlab.findmovie.databinding.MovieRowItemBinding
-import com.headmostlab.findmovie.model.Movie
+import com.headmostlab.findmovie.model.ShortMovie
 
 class MovieAdapter(private val listener: MainFragment.OnItemClickedListener) :
-    ListAdapter<Movie, MovieViewHolder>(DIFF_CALLBACK) {
+    ListAdapter<ShortMovie, MovieViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
         MovieRowItemBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
@@ -20,9 +20,9 @@ class MovieAdapter(private val listener: MainFragment.OnItemClickedListener) :
     }
 
     companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Movie>() {
-            override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem
+        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShortMovie>() {
+            override fun areItemsTheSame(oldItem: ShortMovie, newItem: ShortMovie) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: ShortMovie, newItem: ShortMovie) = oldItem == newItem
         }
     }
 }

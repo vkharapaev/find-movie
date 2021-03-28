@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.headmostlab.findmovie.Event
-import com.headmostlab.findmovie.model.Movie
+import com.headmostlab.findmovie.model.ShortMovie
 import com.headmostlab.findmovie.model.Repository
 import com.headmostlab.findmovie.model.RepositoryImpl
 import java.util.*
@@ -14,7 +14,7 @@ class MainViewModel(
     private val appStateLiveData: MutableLiveData<AppState> = MutableLiveData(),
     private val repository: Repository = RepositoryImpl(),
     private val random: Random = Random(),
-    private var shortMovies: List<Movie>? = null
+    private var shortMovies: List<ShortMovie>? = null
 ) :
     ViewModel() {
 

@@ -2,12 +2,12 @@ package com.headmostlab.findmovie.view.main
 
 import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.databinding.MovieRowItemBinding
-import com.headmostlab.findmovie.model.Movie
+import com.headmostlab.findmovie.model.ShortMovie
 
 class MovieViewHolder(private val binding: MovieRowItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(listener: MainFragment.OnItemClickedListener, item: Movie) {
+    fun bind(listener: MainFragment.OnItemClickedListener, item: ShortMovie) {
         binding.movieId.text = item.id.toString()
         binding.title.text = item.title
         binding.year.text = item.year.toString()
