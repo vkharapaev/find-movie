@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.view
+package com.headmostlab.findmovie.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
-import com.headmostlab.findmovie.viewmodel.AppState
-import com.headmostlab.findmovie.viewmodel.MainViewModel
+import com.headmostlab.findmovie.viewmodel.main.AppState
+import com.headmostlab.findmovie.viewmodel.main.MainViewModel
 
 class MainFragment : Fragment() {
 

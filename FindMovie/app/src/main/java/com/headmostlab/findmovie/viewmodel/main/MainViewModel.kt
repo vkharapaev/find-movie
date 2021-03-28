@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.viewmodel
+package com.headmostlab.findmovie.viewmodel.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

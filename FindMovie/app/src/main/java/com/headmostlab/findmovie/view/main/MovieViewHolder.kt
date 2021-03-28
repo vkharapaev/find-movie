@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.view
+package com.headmostlab.findmovie.view.main
 
 import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.databinding.MovieRowItemBinding

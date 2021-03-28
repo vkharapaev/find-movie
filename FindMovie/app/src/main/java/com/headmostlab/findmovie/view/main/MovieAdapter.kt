@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.view
+package com.headmostlab.findmovie.view.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

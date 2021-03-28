@@ -3,6 +3,7 @@ package com.headmostlab.findmovie.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.headmostlab.findmovie.R
+import com.headmostlab.findmovie.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
