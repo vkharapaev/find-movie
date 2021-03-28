@@ -22,9 +22,18 @@ class MainFragment : Fragment() {
     }
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter: MovieAdapter
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
+    private var adapter: MovieAdapter = MovieAdapter(object : OnItemClickedListener {
+        override fun clicked(position: Int) {
+            viewModel.clickMovieItem(position)
+        }
+    })
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,14 +44,8 @@ class MainFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        adapter = MovieAdapter(object : OnItemClickedListener {
-            override fun clicked(position: Int) {
-                viewModel.clickMovieItem(position)
-            }
-        })
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(createDividerDecoration())
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
     }
 
