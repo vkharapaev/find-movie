@@ -27,7 +27,6 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
     private var adapter = MovieAdapter(object : OnItemClickedListener {
@@ -36,16 +35,11 @@ class MainFragment : Fragment() {
         }
     })
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    private val viewModel: MainViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
         val dataSource = MovieDataSource(service, TMDbApiKeyProvider())
         val repository = RepositoryImpl(dataSource)
-
-        viewModel = ViewModelProvider(
-            this, MainViewModelFactory(repository)
-        ).get(MainViewModel::class.java)
+        ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(

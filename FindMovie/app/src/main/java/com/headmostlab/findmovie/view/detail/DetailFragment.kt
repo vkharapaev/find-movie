@@ -24,19 +24,13 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
 
     private var _binding: DetailFragmentBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: DetailViewModel
     private var movieId: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    private val viewModel: DetailViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
         val dataSource = MovieDataSource(service, TMDbApiKeyProvider())
         val repository = RepositoryImpl(dataSource)
-
-        viewModel = ViewModelProvider(
-            this, DetailViewModelFactory(repository)
-        ).get(DetailViewModel::class.java)
+        ViewModelProvider(this, DetailViewModelFactory(repository)).get(DetailViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
