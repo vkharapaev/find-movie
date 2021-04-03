@@ -30,10 +30,8 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val hostProvider = TMDbHostProvider()
-        val apiKeyProvider = TMDbApiKeyProvider()
-        val service = TMDbApi(hostProvider).getService()
-        val dataSource = MovieDataSource(service, apiKeyProvider)
+        val service = TMDbApi(TMDbHostProvider()).getService()
+        val dataSource = MovieDataSource(service, TMDbApiKeyProvider())
         val repository = RepositoryImpl(dataSource)
 
         viewModel = ViewModelProvider(
