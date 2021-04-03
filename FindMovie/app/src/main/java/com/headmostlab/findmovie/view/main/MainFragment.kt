@@ -8,7 +8,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.model.RepositoryImpl
@@ -46,7 +45,8 @@ class MainFragment : Fragment() {
         val dataSource = MovieDataSource(service, apiKeyProvider)
         val repository = RepositoryImpl(dataSource)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
+        viewModel =
+            ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(

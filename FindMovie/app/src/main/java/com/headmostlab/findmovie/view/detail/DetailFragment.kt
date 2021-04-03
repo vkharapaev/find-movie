@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.google.android.material.snackbar.Snackbar
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
@@ -37,7 +36,10 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         val dataSource = MovieDataSource(service, apiKeyProvider)
         val repository = RepositoryImpl(dataSource)
 
-        viewModel = ViewModelProvider(this, DetailViewModelFactory(repository)).get(DetailViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            DetailViewModelFactory(repository)
+        ).get(DetailViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
