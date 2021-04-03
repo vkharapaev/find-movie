@@ -16,6 +16,7 @@ import com.headmostlab.findmovie.model.apimodel.MovieDataSource
 import com.headmostlab.findmovie.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
+import com.headmostlab.findmovie.utils.showSnackbar
 import com.headmostlab.findmovie.view.detail.DetailFragment
 import com.headmostlab.findmovie.viewmodel.main.MainAppState
 import com.headmostlab.findmovie.viewmodel.main.MainViewModel
@@ -80,10 +81,9 @@ class MainFragment : Fragment() {
             }
             is MainAppState.LoadingError -> {
                 binding.loadingProgress.visibility = View.INVISIBLE
-                Snackbar
-                    .make(binding.main, getString(R.string.error_message), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(getString(R.string.button_reload)) { viewModel.getAppStateLiveData() }
-                    .show()
+                binding.main.showSnackbar(R.string.error_message, R.string.button_reload) {
+                    viewModel.getAppStateLiveData()
+                }
             }
             is MainAppState.OnMovieItemClicked -> {
                 binding.loadingProgress.visibility = View.INVISIBLE

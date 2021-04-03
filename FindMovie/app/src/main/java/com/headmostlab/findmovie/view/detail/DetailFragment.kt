@@ -16,6 +16,7 @@ import com.headmostlab.findmovie.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.network.tmdb.TMDbImageHostProvider
+import com.headmostlab.findmovie.utils.showSnackbar
 import com.headmostlab.findmovie.viewmodel.detail.DetailAppState
 import com.headmostlab.findmovie.viewmodel.detail.DetailViewModel
 import com.headmostlab.findmovie.viewmodel.detail.DetailViewModelFactory
@@ -59,12 +60,9 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
             }
             is DetailAppState.LoadingError -> {
                 binding.loadingProgress.visibility = View.INVISIBLE
-                Snackbar.make(
-                    binding.main,
-                    getString(R.string.error_message),
-                    Snackbar.LENGTH_INDEFINITE
-                ).setAction(getString(R.string.button_reload)) { viewModel.getAppState(movieId) }
-                    .show()
+                binding.main.showSnackbar(R.string.error_message, R.string.button_reload) {
+                    viewModel.getAppState(movieId)
+                }
             }
         }
     }
