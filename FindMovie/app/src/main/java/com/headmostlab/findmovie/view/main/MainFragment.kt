@@ -30,7 +30,7 @@ class MainFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-    private var adapter: MovieAdapter = MovieAdapter(object : OnItemClickedListener {
+    private var adapter = MovieAdapter(object : OnItemClickedListener {
         override fun clicked(position: Int) {
             viewModel.clickMovieItem(position)
         }
