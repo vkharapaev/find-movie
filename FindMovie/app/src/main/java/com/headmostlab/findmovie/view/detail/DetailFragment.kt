@@ -35,8 +35,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         val repository = RepositoryImpl(dataSource)
 
         viewModel = ViewModelProvider(
-            this,
-            DetailViewModelFactory(repository)
+            this, DetailViewModelFactory(repository)
         ).get(DetailViewModel::class.java)
     }
 

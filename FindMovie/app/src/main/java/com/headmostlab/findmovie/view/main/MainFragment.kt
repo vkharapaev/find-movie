@@ -43,8 +43,9 @@ class MainFragment : Fragment() {
         val dataSource = MovieDataSource(service, TMDbApiKeyProvider())
         val repository = RepositoryImpl(dataSource)
 
-        viewModel =
-            ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this, MainViewModelFactory(repository)
+        ).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
