@@ -8,12 +8,13 @@ class MovieViewHolder(private val binding: MovieRowItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bind(listener: MainFragment.OnItemClickedListener, item: ShortMovie) {
-        binding.movieId.text = item.id.toString()
-        binding.title.text = item.title
-        binding.year.text = item.year.toString()
-        binding.rating.text = item.rating.toString()
-        binding.poster.text = item.poster
-        binding.root.setOnClickListener { listener.clicked(adapterPosition) }
+        with(binding) {
+            movieId.text = item.id.toString()
+            title.text = item.title
+            year.text = item.year.toString()
+            rating.text = item.rating.toString()
+            poster.text = item.poster
+            root.setOnClickListener { listener.clicked(adapterPosition) }
+        }
     }
-
 }

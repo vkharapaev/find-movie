@@ -28,8 +28,10 @@ class MainFragment : Fragment() {
     }
 
     private var _binding: MainFragmentBinding? = null
+
     private val binding get() = _binding!!
-    private var adapter = MovieAdapter(object : OnItemClickedListener {
+
+    private var storedAdapter = MovieAdapter(object : OnItemClickedListener {
         override fun clicked(position: Int) {
             viewModel.clickMovieItem(position)
         }
@@ -51,8 +53,10 @@ class MainFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(createDividerDecoration())
+        with(binding.recyclerView) {
+            adapter = storedAdapter
+            addItemDecoration(createDividerDecoration())
+        }
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
     }
 
@@ -61,44 +65,49 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-    private fun renderAppState(state: MainAppState): Unit {
+    private fun renderAppState(state: MainAppState) {
         when (state) {
-            MainAppState.Loading -> {
-                binding.loadingProgress.visibility = View.VISIBLE
-                binding.recyclerView.visibility = View.INVISIBLE
+            MainAppState.Loading -> binding.apply {
+                loadingProgress.visibility = View.VISIBLE
+                recyclerView.visibility = View.INVISIBLE
             }
             is MainAppState.MoviesLoaded -> {
-                adapter.submitList(state.movies)
-                binding.loadingProgress.visibility = View.INVISIBLE
-                binding.recyclerView.visibility = View.VISIBLE
+                storedAdapter.submitList(state.movies)
+                binding.apply {
+                    loadingProgress.visibility = View.INVISIBLE
+                    recyclerView.visibility = View.VISIBLE
+                }
             }
-            is MainAppState.LoadingError -> {
-                binding.loadingProgress.visibility = View.INVISIBLE
-                binding.main.showSnackbar(R.string.error_message, R.string.button_reload) {
+            is MainAppState.LoadingError -> binding.apply {
+                loadingProgress.visibility = View.INVISIBLE
+                main.showSnackbar(R.string.error_message, R.string.button_reload) {
                     viewModel.getAppStateLiveData()
                 }
             }
             is MainAppState.OnMovieItemClicked -> {
-                binding.loadingProgress.visibility = View.INVISIBLE
-                binding.recyclerView.visibility = View.VISIBLE
-                val movieId = state.movieId.getContentIfNotHandled()
-                movieId?.let { showDetail(it) }
+                binding.apply {
+                    loadingProgress.visibility = View.INVISIBLE
+                    recyclerView.visibility = View.VISIBLE
+                }
+                state.movieId.getContentIfNotHandled()?.let { showDetail(it) }
             }
         }
     }
 
     private fun showDetail(movieId: Int) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.container, DetailFragment.newInstance(movieId))
-            .addToBackStack("")
-            .commit()
+        requireActivity().supportFragmentManager.apply {
+            beginTransaction()
+                .replace(R.id.container, DetailFragment.newInstance(movieId))
+                .addToBackStack("")
+                .commit()
+        }
     }
 
     private fun createDividerDecoration(): DividerItemDecoration {
-        val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         val drawable = ResourcesCompat.getDrawable(resources, R.drawable.divider, null)
-        drawable?.apply { decoration.setDrawable(drawable) }
-        return decoration
+        val divider = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        drawable?.let { divider.setDrawable(it) }
+        return divider
     }
 
     interface OnItemClickedListener {

@@ -14,39 +14,34 @@ class MainViewModel(
     private val repository: Repository,
     private val appStateLiveData: MutableLiveData<MainAppState> = MutableLiveData(),
     private val disposables: CompositeDisposable = CompositeDisposable(),
-    private var shortMovies: List<ShortMovie>? = null
+    private var movies: List<ShortMovie>? = null
 ) :
     ViewModel() {
 
-    fun getAppStateLiveData(): LiveData<MainAppState> {
-        loadMovies()
-        return appStateLiveData
-    }
+    fun getAppStateLiveData(): LiveData<MainAppState> = appStateLiveData.also { loadMovies() }
 
     private fun loadMovies() {
-        val data = shortMovies;
+        val data = movies;
         if (data != null) {
             appStateLiveData.value = MainAppState.MoviesLoaded(data)
         } else {
             appStateLiveData.value = MainAppState.Loading
-            disposables.add(
-                repository.getMovies()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                        {
-                            appStateLiveData.postValue(MainAppState.MoviesLoaded(it))
-                            shortMovies = it
-                        },
-                        { appStateLiveData.postValue(MainAppState.LoadingError(it)) }
-                    )
-            )
+            repository.getMovies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        movies = it
+                        appStateLiveData.postValue(MainAppState.MoviesLoaded(it))
+                    },
+                    { appStateLiveData.postValue(MainAppState.LoadingError(it)) }
+                )
+                .also { disposables.add(it) }
         }
     }
 
     fun clickMovieItem(position: Int) {
-        val movie = shortMovies?.get(position)
-        if (movie != null) {
+        movies?.get(position)?.let { movie ->
             appStateLiveData.value = MainAppState.OnMovieItemClicked(Event(movie.id))
         }
     }

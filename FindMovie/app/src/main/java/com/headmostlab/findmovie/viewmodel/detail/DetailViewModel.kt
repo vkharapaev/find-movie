@@ -16,27 +16,24 @@ class DetailViewModel(
     private var movie: FullMovie? = null
 ) : ViewModel() {
 
-    fun getAppState(movieId: Int): LiveData<DetailAppState> {
-        loadMovie(movieId)
-        return appState
-    }
+    fun getAppState(movieId: Int): LiveData<DetailAppState> = appState.also { loadMovie(movieId) }
 
     private fun loadMovie(movieId: Int) {
-        val movie = this.movie
         movie?.let {
-            appState.value = DetailAppState.MovieLoaded(movie)
+            appState.value = DetailAppState.MovieLoaded(it)
             return
         }
         appState.value = DetailAppState.Loading
-        disposables.add(
-            repository.getMovie(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    this.movie = it
+        repository.getMovie(movieId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    movie = it
                     appState.value = DetailAppState.MovieLoaded(it)
-                }, { appState.value = DetailAppState.LoadingError(it) })
-        )
+                },
+                { appState.value = DetailAppState.LoadingError(it) })
+            .also { disposables.add(it) }
     }
 
     override fun onCleared() {
