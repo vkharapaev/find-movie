@@ -21,6 +21,7 @@ class MovieAdapter(
         val view = inflater.inflate(viewType, parent, false)
         return when (viewType) {
             R.layout.movie_row_item -> MovieViewHolderImpl(view)
+            R.layout.movie_row_item2 -> MovieViewHolder2Impl(view)
             else -> MovieViewHolderImpl(view)
         }
     }

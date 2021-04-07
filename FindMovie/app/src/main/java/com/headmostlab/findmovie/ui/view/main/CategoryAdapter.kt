@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.databinding.MovieCategoryRowItemBinding
 import com.headmostlab.findmovie.domain.entity.MovieWithCategory
+import com.rubensousa.recyclerview.ScrollStateHolder
 
 class CategoryAdapter(
     private val listener: MainFragment.OnItemClickedListener,
+    private val scrollHolder: ScrollStateHolder
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -22,12 +24,20 @@ class CategoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         CategoryViewHolder(
             MovieCategoryRowItemBinding.inflate(LayoutInflater.from(parent.context)),
+            scrollHolder,
             listener
         )
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CategoryViewHolder -> holder.bind(movieCategories[position])
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is CategoryViewHolder) {
+            holder.onRecycled()
         }
     }
 

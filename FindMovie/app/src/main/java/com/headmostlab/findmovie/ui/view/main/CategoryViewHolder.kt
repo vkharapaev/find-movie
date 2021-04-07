@@ -5,12 +5,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.databinding.MovieCategoryRowItemBinding
 import com.headmostlab.findmovie.domain.entity.MovieWithCategory
 import com.headmostlab.findmovie.ui.view.utils.addDivider
+import com.rubensousa.recyclerview.ScrollStateHolder
 
 class CategoryViewHolder(
     private val binding: MovieCategoryRowItemBinding,
+    private val scrollState: ScrollStateHolder,
     private val listener: MainFragment.OnItemClickedListener
 ) :
-    RecyclerView.ViewHolder(binding.root) {
+    RecyclerView.ViewHolder(binding.root), ScrollStateHolder.ScrollStateKeyProvider {
 
     private var stateKey: String? = null
 
@@ -22,9 +24,19 @@ class CategoryViewHolder(
         }
         binding.recyclerView.adapter = adapter
         binding.title.text = binding.title.context.getText(item.category.title)
+        scrollState.restoreScrollState(binding.recyclerView, this)
+    }
+
+    fun onRecycled() {
+        scrollState.saveScrollState(binding.recyclerView, this)
+    }
+
+    override fun getScrollStateKey(): String? {
+        return stateKey
     }
 
     init {
         binding.recyclerView.addDivider(DividerItemDecoration.HORIZONTAL)
+        scrollState.setupRecyclerView(binding.recyclerView, this)
     }
 }
