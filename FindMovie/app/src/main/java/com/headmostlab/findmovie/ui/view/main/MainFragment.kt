@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
-import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.MovieDataSource
+import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
+import com.headmostlab.findmovie.data.repository.MockRepository
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
 import com.headmostlab.findmovie.ui.viewmodel.main.MainAppState
@@ -39,8 +40,8 @@ class MainFragment : Fragment() {
 
     private val viewModel: MainViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
-        val dataSource = MovieDataSource(service, TMDbApiKeyProvider())
-        val repository = RepositoryImpl(dataSource)
+        val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
+        val repository = MockRepository() //RepositoryImpl(dataSource)
         ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
     }
 
