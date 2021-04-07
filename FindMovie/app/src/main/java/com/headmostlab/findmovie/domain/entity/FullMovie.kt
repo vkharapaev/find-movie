@@ -7,9 +7,11 @@ data class FullMovie(
     val genres: List<String>,
     val duration: Int,
     val rating: Double,
+    val votesAverage: Double,
+    val votesCount: Int,
     val budget: Int,
     val revenue: Int,
-    val year: Int,
+    val date: String,
     val description: String,
     val poster: String
 )

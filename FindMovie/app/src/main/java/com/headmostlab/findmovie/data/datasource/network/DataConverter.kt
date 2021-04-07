@@ -23,17 +23,19 @@ object DataConverter {
 
     fun map(movie: ApiFullMovie): FullMovie {
         return FullMovie(
-                movie.id,
-                movie.title,
-                movie.originalTitle,
-                map(movie.genres),
-                movie.runtime ?: 0,
-                movie.popularity,
-                movie.budget,
-                movie.revenue,
-                movie.releaseDate.substring(0..3).toInt(),
-                movie.overview ?: "",
-                movie.posterPath ?: ""
+            movie.id,
+            movie.title,
+            movie.originalTitle,
+            map(movie.genres),
+            movie.runtime ?: 0,
+            movie.popularity,
+            movie.voteAverage,
+            movie.voteCount,
+            movie.budget,
+            movie.revenue,
+            movie.releaseDate,
+            movie.overview ?: "",
+            movie.posterPath ?: ""
         )
     }
 

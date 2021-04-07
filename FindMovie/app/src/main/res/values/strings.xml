@@ -7,4 +7,9 @@
     <string name="movie_category_now_playing">Now Playing</string>
     <string name="movie_category_popular">Popular</string>
     <string name="movie_category_upcoming">Upcoming</string>
+
+    <string name="detail_revenue">Revenue: %s</string>
+    <string name="detail_budget">Budget: %s</string>
+    <string name="detail_release_date">Release date: (%s)</string>
+    <string name="detail_duration">%s min</string>
 </resources>

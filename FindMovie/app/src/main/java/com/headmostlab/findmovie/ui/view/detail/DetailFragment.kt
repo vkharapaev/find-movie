@@ -66,17 +66,18 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     }
 
     private fun setData(movie: FullMovie) {
+        val context = binding.root.context
         with(binding) {
-            movieId.text = movie.id.toString()
             title.text = movie.title
             origTitle.text = movie.origTitle
-            genres.text = movie.genres.toString()
-            duration.text = movie.duration.toString()
-            rating.text = movie.rating.toString()
-            budget.text = movie.budget.toString()
-            revenue.text = movie.revenue.toString()
-            year.text = movie.year.toString()
+            genres.text = genresToString(movie.genres)
+            duration.text = context.getString(R.string.detail_duration, movie.duration.toString())
+            rating.text = "${movie.votesAverage} (${movie.votesCount})"
+            budget.text = context.getString(R.string.detail_budget, movie.budget.toString())
+            revenue.text = context.getString(R.string.detail_revenue, movie.revenue.toString())
+            date.text = context.getString(R.string.detail_release_date, movie.date)
             description.text = movie.description
+            movieId.text = movie.id.toString()
         }
 
         val imageUrl = TMDbImageHostProvider().getHostUrl() + movie.poster
@@ -86,6 +87,9 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.poster)
     }
+
+    private fun genresToString(genres: List<String>) =
+        genres.toString().removePrefix("[").removeSuffix("]")
 
     override fun onDestroyView() {
         super.onDestroyView()
