@@ -7,7 +7,7 @@ import com.headmostlab.findmovie.domain.entity.FullMovie
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
 
-class MockDataSource (private val gson: Gson = Gson()) {
+class TMDbMockDataSource (private val gson: Gson = Gson()) {
 
     fun getMovies(): Single<List<ShortMovie>> = Single.fromCallable {
         DataConverter.map(gson.fromJson(POPULAR_MOVIES, ApiMovies::class.java))
