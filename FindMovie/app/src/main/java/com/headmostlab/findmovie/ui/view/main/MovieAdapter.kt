@@ -32,8 +32,8 @@ class MovieAdapter(
     override fun getItemViewType(position: Int) =
             when (category) {
                 MovieCategory.NOW_PLAYING -> R.layout.movie_row_item
+                MovieCategory.UPCOMING -> R.layout.movie_row_item2
                 MovieCategory.POPULAR -> R.layout.movie_row_item
-                MovieCategory.UPCOMING -> TODO()
             }
 
     companion object {

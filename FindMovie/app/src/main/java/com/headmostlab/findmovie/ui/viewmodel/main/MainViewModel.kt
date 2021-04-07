@@ -49,8 +49,8 @@ class MainViewModel(
 
     private fun getMovies(category: MovieCategory) = when (category) {
         MovieCategory.POPULAR -> repository.getPopularMovies()
-        MovieCategory.NOW_PLAYING -> TODO()
-        MovieCategory.UPCOMING -> TODO()
+        MovieCategory.NOW_PLAYING -> repository.getNowPlayingMovies()
+        MovieCategory.UPCOMING -> repository.getUpcomingMovies()
     }.map { movies -> MovieWithCategory(category, movies) }
 
     fun clickMovieItem(categoryPosition: Int, moviePosition: Int) {
