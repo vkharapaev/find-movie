@@ -32,11 +32,13 @@ class MainFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private var storedAdapter = MovieAdapter(object : OnItemClickedListener {
-        override fun clicked(position: Int) {
-            viewModel.clickMovieItem(position)
-        }
-    })
+    private val storedAdapter by lazy {
+        CategoryAdapter(object : OnItemClickedListener {
+            override fun clicked(categoryPosition: Int, moviePosition: Int) {
+                viewModel.clickMovieItem(categoryPosition, moviePosition)
+            }
+        })
+    }
 
     private val viewModel: MainViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
@@ -73,7 +75,7 @@ class MainFragment : Fragment() {
                 recyclerView.visibility = View.INVISIBLE
             }
             is MainAppState.MoviesLoaded -> {
-                storedAdapter.submitList(state.movies)
+                storedAdapter.movieCategories = state.movies
                 binding.apply {
                     loadingProgress.visibility = View.INVISIBLE
                     recyclerView.visibility = View.VISIBLE
@@ -112,7 +114,7 @@ class MainFragment : Fragment() {
     }
 
     interface OnItemClickedListener {
-        fun clicked(position: Int)
+        fun clicked(categoryPosition: Int, moviePosition: Int)
     }
 
 }

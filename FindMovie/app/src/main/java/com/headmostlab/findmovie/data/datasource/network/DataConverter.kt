@@ -11,12 +11,12 @@ object DataConverter {
     fun map(movies: ApiMovies): List<ShortMovie> =
             movies.results.map { map(it) }
 
-    fun map(movie: ApiShortMovie): ShortMovie {
+    private fun map(movie: ApiShortMovie): ShortMovie {
         return ShortMovie(
                 movie.id,
                 movie.title,
-                movie.releaseDate.substring(0..3).toInt(),
-                movie.popularity,
+                movie.releaseDate,
+                movie.voteAverage,
                 movie.posterPath
         )
     }

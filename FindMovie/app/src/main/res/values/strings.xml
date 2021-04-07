@@ -3,4 +3,8 @@
     <string name="error_message">Error</string>
     <string name="button_reload">Reload</string>
     <string name="detail_fragment_movie_id_is_null">Movie id must be specified</string>
+
+    <string name="movie_category_now_playing">Now Playing</string>
+    <string name="movie_category_popular">Popular</string>
+    <string name="movie_category_upcoming">Upcoming</string>
 </resources>

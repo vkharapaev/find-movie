@@ -4,28 +4,46 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MovieRowItemBinding
+import com.headmostlab.findmovie.domain.entity.MovieCategory
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 
-class MovieAdapter(private val listener: MainFragment.OnItemClickedListener) :
-    ListAdapter<ShortMovie, MovieViewHolder>(DIFF_CALLBACK) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MovieViewHolder(
-        MovieRowItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
-    )
+class MovieAdapter(
+        var categoryPosition: Int,
+        private val listener: MainFragment.OnItemClickedListener,
+        private val category: MovieCategory
+) :
+        ListAdapter<ShortMovie, MovieViewHolder>(DIFF_CALLBACK) {
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.bind(listener, getItem(position))
-    }
-
-    companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShortMovie>() {
-            override fun areItemsTheSame(oldItem: ShortMovie, newItem: ShortMovie) =
-                oldItem.id == newItem.id
-
-            override fun areContentsTheSame(oldItem: ShortMovie, newItem: ShortMovie) =
-                oldItem == newItem
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val view = inflater.inflate(viewType, parent, false)
+        return when (viewType) {
+            R.layout.movie_row_item -> MovieViewHolderImpl(view)
+            else -> MovieViewHolderImpl(view)
         }
     }
+
+    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        holder.bind(listener, categoryPosition, getItem(position))
+    }
+
+    override fun getItemViewType(position: Int) =
+            when (category) {
+                MovieCategory.NOW_PLAYING -> R.layout.movie_row_item
+                MovieCategory.POPULAR -> R.layout.movie_row_item
+                MovieCategory.UPCOMING -> TODO()
+            }
+
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShortMovie>() {
+            override fun areItemsTheSame(oldItem: ShortMovie, newItem: ShortMovie) =
+                    oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: ShortMovie, newItem: ShortMovie) =
+                    oldItem == newItem
+        }
+    }
+
 }
