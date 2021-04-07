@@ -18,6 +18,7 @@ import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.data.repository.MockRepository
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
+import com.headmostlab.findmovie.ui.view.utils.addDivider
 import com.headmostlab.findmovie.ui.viewmodel.main.MainAppState
 import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModel
 import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModelFactory
@@ -58,7 +59,7 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         with(binding.recyclerView) {
             adapter = storedAdapter
-            addItemDecoration(createDividerDecoration())
+            addDivider()
         }
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
     }
@@ -104,13 +105,6 @@ class MainFragment : Fragment() {
                 .addToBackStack("")
                 .commit()
         }
-    }
-
-    private fun createDividerDecoration(): DividerItemDecoration {
-        val drawable = ResourcesCompat.getDrawable(resources, R.drawable.divider, null)
-        val divider = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        drawable?.let { divider.setDrawable(it) }
-        return divider
     }
 
     interface OnItemClickedListener {

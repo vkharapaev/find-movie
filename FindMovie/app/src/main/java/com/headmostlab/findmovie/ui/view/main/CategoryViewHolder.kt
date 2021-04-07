@@ -1,8 +1,10 @@
 package com.headmostlab.findmovie.ui.view.main
 
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.databinding.MovieCategoryRowItemBinding
 import com.headmostlab.findmovie.domain.entity.MovieWithCategory
+import com.headmostlab.findmovie.ui.view.utils.addDivider
 
 class CategoryViewHolder(
     private val binding: MovieCategoryRowItemBinding,
@@ -20,5 +22,9 @@ class CategoryViewHolder(
         }
         binding.recyclerView.adapter = adapter
         binding.title.text = binding.title.context.getText(item.category.title)
+    }
+
+    init {
+        binding.recyclerView.addDivider(DividerItemDecoration.HORIZONTAL)
     }
 }
