@@ -11,5 +11,5 @@ class RepositoryImpl(private val dataSource: TMDbDataSource) : Repository {
     override fun getUpcomingMovies(): Single<List<ShortMovie>> = dataSource.getUpcomingMovies()
     override fun getPopularMovies(): Single<List<ShortMovie>> = dataSource.getPopularMovies()
     override fun getMovie(movieId: Int): Single<FullMovie> = dataSource.getMovie(movieId)
-    override fun getMovieCategories(): List<MovieCategory> = TODO("Not yet implemented")
+    override fun getMovieCategories(): List<MovieCategory> = dataSource.getCategories()
 }
