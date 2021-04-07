@@ -6,7 +6,9 @@ import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
 
 interface Repository {
-    fun getMovies(): Single<List<ShortMovie>>
+    fun getNowPlayingMovies(): Single<List<ShortMovie>>
+    fun getUpcomingMovies(): Single<List<ShortMovie>>
+    fun getPopularMovies(): Single<List<ShortMovie>>
     fun getMovie(movieId: Int): Single<FullMovie>
     fun getMovieCategories(): List<MovieCategory>
 }

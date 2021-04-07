@@ -7,15 +7,9 @@ import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
 
 class RepositoryImpl(private val dataSource: TMDbDataSource) : Repository {
-    override fun getMovies(): Single<List<ShortMovie>> {
-        return dataSource.getMovies()
-    }
-
-    override fun getMovie(id: Int) : Single<FullMovie> {
-        return dataSource.getMovie(id)
-    }
-
-    override fun getMovieCategories(): List<MovieCategory> {
-        TODO("Not yet implemented")
-    }
+    override fun getNowPlayingMovies(): Single<List<ShortMovie>> = dataSource.getNowPlayingMovies()
+    override fun getUpcomingMovies(): Single<List<ShortMovie>> = dataSource.getUpcomingMovies()
+    override fun getPopularMovies(): Single<List<ShortMovie>> = dataSource.getPopularMovies()
+    override fun getMovie(movieId: Int): Single<FullMovie> = dataSource.getMovie(movieId)
+    override fun getMovieCategories(): List<MovieCategory> = TODO("Not yet implemented")
 }

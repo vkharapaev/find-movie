@@ -7,7 +7,6 @@ import com.headmostlab.findmovie.Event
 import com.headmostlab.findmovie.data.repository.Repository
 import com.headmostlab.findmovie.domain.entity.MovieCategory
 import com.headmostlab.findmovie.domain.entity.MovieWithCategory
-import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -49,7 +48,7 @@ class MainViewModel(
     }
 
     private fun getMovies(category: MovieCategory) = when (category) {
-        MovieCategory.POPULAR -> repository.getMovies()
+        MovieCategory.POPULAR -> repository.getPopularMovies()
         MovieCategory.NOW_PLAYING -> TODO()
         MovieCategory.UPCOMING -> TODO()
     }.map { movies -> MovieWithCategory(category, movies) }
