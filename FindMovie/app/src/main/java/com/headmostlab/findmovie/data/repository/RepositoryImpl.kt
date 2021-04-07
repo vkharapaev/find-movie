@@ -1,6 +1,6 @@
 package com.headmostlab.findmovie.model
 
-import com.headmostlab.findmovie.model.apimodel.MovieDataSource
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.MovieDataSource
 import io.reactivex.Single
 
 class RepositoryImpl(private val dataSource: MovieDataSource) : Repository {
