@@ -12,4 +12,7 @@
     <string name="detail_budget">Budget: %s</string>
     <string name="detail_release_date">Release date: (%s)</string>
     <string name="detail_duration">%s min</string>
+
+    <string name="connection_lost">Connection lost</string>
+    <string name="connection_found">Connection found</string>
 </resources>

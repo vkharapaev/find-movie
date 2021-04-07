@@ -1,5 +1,10 @@
 package com.headmostlab.findmovie.ui.view.main
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -42,6 +47,20 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
         }, scrollStateHolder)
     }
 
+    private val connectivityReceiver: BroadcastReceiver by lazy {
+        object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val messageId = intent?.let {
+                    when (it.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+                        false -> R.string.connection_found
+                        true -> R.string.connection_lost
+                    }
+                } ?: return
+                binding.main.showSnackbar(messageId)
+            }
+        }
+    }
+
     private val viewModel: MainViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
         val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
@@ -75,11 +94,17 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
         scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
         scrollStateHolder.restoreScrollState(binding.recyclerView, this)
+
+        activity?.registerReceiver(
+            connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
+        activity?.unregisterReceiver(connectivityReceiver)
     }
 
     private fun renderAppState(state: MainAppState) {
