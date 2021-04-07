@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.utils
+package com.headmostlab.findmovie.ui.view.utils
 
 import android.view.View
 import androidx.annotation.StringRes

@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.view.main
+package com.headmostlab.findmovie.ui.view.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,16 +10,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
-import com.headmostlab.findmovie.model.RepositoryImpl
-import com.headmostlab.findmovie.model.apimodel.MovieDataSource
-import com.headmostlab.findmovie.network.tmdb.TMDbApi
-import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
-import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
-import com.headmostlab.findmovie.utils.showSnackbar
-import com.headmostlab.findmovie.view.detail.DetailFragment
-import com.headmostlab.findmovie.viewmodel.main.MainAppState
-import com.headmostlab.findmovie.viewmodel.main.MainViewModel
-import com.headmostlab.findmovie.viewmodel.main.MainViewModelFactory
+import com.headmostlab.findmovie.data.repository.RepositoryImpl
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.MovieDataSource
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
+import com.headmostlab.findmovie.ui.view.utils.showSnackbar
+import com.headmostlab.findmovie.ui.view.detail.DetailFragment
+import com.headmostlab.findmovie.ui.viewmodel.main.MainAppState
+import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModel
+import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModelFactory
 
 class MainFragment : Fragment() {
 

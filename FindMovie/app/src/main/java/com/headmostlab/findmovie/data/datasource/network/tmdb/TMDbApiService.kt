@@ -1,7 +1,7 @@
-package com.headmostlab.findmovie.network.tmdb
+package com.headmostlab.findmovie.data.datasource.network.tmdb
 
-import com.headmostlab.findmovie.model.apimodel.movie.ApiFullMovie
-import com.headmostlab.findmovie.model.apimodel.popular.ApiMovies
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiMovies
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

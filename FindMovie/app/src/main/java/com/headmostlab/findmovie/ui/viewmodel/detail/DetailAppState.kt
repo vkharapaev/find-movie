@@ -1,6 +1,6 @@
-package com.headmostlab.findmovie.viewmodel.detail
+package com.headmostlab.findmovie.ui.viewmodel.detail
 
-import com.headmostlab.findmovie.model.FullMovie
+import com.headmostlab.findmovie.domain.entity.FullMovie
 
 sealed class DetailAppState {
     data class MovieLoaded(val movie: FullMovie) : DetailAppState()

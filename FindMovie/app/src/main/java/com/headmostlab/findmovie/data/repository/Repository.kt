@@ -1,5 +1,7 @@
-package com.headmostlab.findmovie.model
+package com.headmostlab.findmovie.data.repository
 
+import com.headmostlab.findmovie.domain.entity.FullMovie
+import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
 
 interface Repository {

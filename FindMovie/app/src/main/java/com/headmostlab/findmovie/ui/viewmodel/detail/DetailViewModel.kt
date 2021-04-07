@@ -1,10 +1,10 @@
-package com.headmostlab.findmovie.viewmodel.detail
+package com.headmostlab.findmovie.ui.viewmodel.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.headmostlab.findmovie.model.FullMovie
-import com.headmostlab.findmovie.model.Repository
+import com.headmostlab.findmovie.domain.entity.FullMovie
+import com.headmostlab.findmovie.data.repository.Repository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

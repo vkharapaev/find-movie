@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.view.detail
+package com.headmostlab.findmovie.ui.view.detail
 
 import android.os.Bundle
 import android.view.View
@@ -8,17 +8,17 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
-import com.headmostlab.findmovie.model.FullMovie
-import com.headmostlab.findmovie.model.RepositoryImpl
-import com.headmostlab.findmovie.model.apimodel.MovieDataSource
-import com.headmostlab.findmovie.network.tmdb.TMDbApi
-import com.headmostlab.findmovie.network.tmdb.TMDbApiKeyProvider
-import com.headmostlab.findmovie.network.tmdb.TMDbHostProvider
-import com.headmostlab.findmovie.network.tmdb.TMDbImageHostProvider
-import com.headmostlab.findmovie.utils.showSnackbar
-import com.headmostlab.findmovie.viewmodel.detail.DetailAppState
-import com.headmostlab.findmovie.viewmodel.detail.DetailViewModel
-import com.headmostlab.findmovie.viewmodel.detail.DetailViewModelFactory
+import com.headmostlab.findmovie.domain.entity.FullMovie
+import com.headmostlab.findmovie.data.repository.RepositoryImpl
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.MovieDataSource
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbImageHostProvider
+import com.headmostlab.findmovie.ui.view.utils.showSnackbar
+import com.headmostlab.findmovie.ui.viewmodel.detail.DetailAppState
+import com.headmostlab.findmovie.ui.viewmodel.detail.DetailViewModel
+import com.headmostlab.findmovie.ui.viewmodel.detail.DetailViewModelFactory
 
 class DetailFragment : Fragment(R.layout.detail_fragment) {
 

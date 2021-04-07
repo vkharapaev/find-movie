@@ -1,13 +1,13 @@
-package com.headmostlab.findmovie.model.apimodel
+package com.headmostlab.findmovie.data.datasource.network.tmdb.dto
 
-import com.headmostlab.findmovie.model.FullMovie
-import com.headmostlab.findmovie.model.ShortMovie
-import com.headmostlab.findmovie.model.apimodel.movie.ApiFullMovie
-import com.headmostlab.findmovie.model.apimodel.movie.ApiGenre
-import com.headmostlab.findmovie.model.apimodel.popular.ApiMovies
-import com.headmostlab.findmovie.model.apimodel.popular.ApiShortMovie
-import com.headmostlab.findmovie.network.ApiKeyProvider
-import com.headmostlab.findmovie.network.tmdb.TMDbApiService
+import com.headmostlab.findmovie.domain.entity.FullMovie
+import com.headmostlab.findmovie.domain.entity.ShortMovie
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiGenre
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiMovies
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiShortMovie
+import com.headmostlab.findmovie.data.datasource.network.ApiKeyProvider
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiService
 import io.reactivex.Single
 
 class MovieDataSource(

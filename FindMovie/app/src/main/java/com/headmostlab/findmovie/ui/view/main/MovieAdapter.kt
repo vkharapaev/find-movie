@@ -1,12 +1,11 @@
-package com.headmostlab.findmovie.view.main
+package com.headmostlab.findmovie.ui.view.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.MovieRowItemBinding
-import com.headmostlab.findmovie.model.ShortMovie
+import com.headmostlab.findmovie.domain.entity.ShortMovie
 
 class MovieAdapter(private val listener: MainFragment.OnItemClickedListener) :
     ListAdapter<ShortMovie, MovieViewHolder>(DIFF_CALLBACK) {

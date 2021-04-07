@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.model.apimodel.movie
+package com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie
 
 import com.google.gson.annotations.SerializedName
 

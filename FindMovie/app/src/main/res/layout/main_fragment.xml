@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/default_margin"
     android:layout_marginEnd="@dimen/default_margin"
-    tools:context=".view.main.MainFragment">
+    tools:context=".ui.view.main.MainFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

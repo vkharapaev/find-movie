@@ -1,9 +1,9 @@
-package com.headmostlab.findmovie.view
+package com.headmostlab.findmovie.ui.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.view.main.MainFragment
+import com.headmostlab.findmovie.ui.view.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
 

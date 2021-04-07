@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.model
+package com.headmostlab.findmovie.domain.entity
 
 data class FullMovie(
     val id: Int,
