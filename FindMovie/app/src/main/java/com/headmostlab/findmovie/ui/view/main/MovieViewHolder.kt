@@ -10,4 +10,6 @@ abstract class MovieViewHolder(private val view: View) : RecyclerView.ViewHolder
             categoryPosition: Int,
             movie: ShortMovie
     )
+
+    abstract fun onRecycled()
 }

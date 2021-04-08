@@ -34,4 +34,8 @@ class MovieViewHolder2Impl(
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.posterImage)
     }
+
+    override fun onRecycled() {
+        GlideApp.with(binding.root.context).clear(binding.posterImage)
+    }
 }

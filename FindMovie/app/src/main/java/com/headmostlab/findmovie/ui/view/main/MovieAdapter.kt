@@ -37,6 +37,11 @@ class MovieAdapter(
                 MovieCategory.POPULAR -> R.layout.movie_row_item
             }
 
+    override fun onViewRecycled(holder: MovieViewHolder) {
+        super.onViewRecycled(holder)
+        holder.onRecycled()
+    }
+
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShortMovie>() {
             override fun areItemsTheSame(oldItem: ShortMovie, newItem: ShortMovie) =
