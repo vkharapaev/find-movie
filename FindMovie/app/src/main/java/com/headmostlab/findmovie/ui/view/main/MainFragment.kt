@@ -1,10 +1,5 @@
 package com.headmostlab.findmovie.ui.view.main
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +11,6 @@ import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
-import com.headmostlab.findmovie.data.repository.MockRepository
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
@@ -46,20 +40,6 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
                 viewModel.clickMovieItem(categoryPosition, moviePosition)
             }
         }, scrollStateHolder)
-    }
-
-    private val connectivityReceiver: BroadcastReceiver by lazy {
-        object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                val messageId = intent?.let {
-                    when (it.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
-                        false -> R.string.connection_found
-                        true -> R.string.connection_lost
-                    }
-                } ?: return
-                binding.main.showSnackbar(messageId)
-            }
-        }
     }
 
     private val viewModel: MainViewModel by lazy {
@@ -98,17 +78,11 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
         viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let { showDetail(it) }
         })
-
-        activity?.registerReceiver(
-            connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        )
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-
-        activity?.unregisterReceiver(connectivityReceiver)
     }
 
     private fun renderAppState(state: MainAppState) {
