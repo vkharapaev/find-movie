@@ -20,6 +20,10 @@ class MainViewModel(
 ) :
     ViewModel() {
 
+    private val _openMovieEvent: MutableLiveData<Event<Int>> = MutableLiveData()
+    val openMovieEvent: LiveData<Event<Int>>
+        get() = _openMovieEvent
+
     fun getAppStateLiveData(): LiveData<MainAppState> = appStateLiveData.also { loadMovies() }
 
     private fun loadMovies(reload: Boolean = false) {
@@ -35,15 +39,15 @@ class MainViewModel(
             moviesWithCategories.clear()
             appStateLiveData.value = MainAppState.Loading
             Observable.fromIterable(repository.getMovieCategories())
-                    .flatMap { getMovies(it).toObservable() }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ item ->
-                        moviesWithCategories.add(item)
-                        appStateLiveData.value =
-                                MainAppState.MoviesLoaded(moviesWithCategories.toList())
-                    }, { appStateLiveData.postValue(MainAppState.LoadingError(it)) })
-                    .also { disposables.add(it) }
+                .flatMap { getMovies(it).toObservable() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ item ->
+                    moviesWithCategories.add(item)
+                    appStateLiveData.value =
+                        MainAppState.MoviesLoaded(moviesWithCategories.toList())
+                }, { appStateLiveData.postValue(MainAppState.LoadingError(it)) })
+                .also { disposables.add(it) }
         }
     }
 
@@ -55,8 +59,7 @@ class MainViewModel(
 
     fun clickMovieItem(categoryPosition: Int, moviePosition: Int) {
         val moviesWithCategory = moviesWithCategories[categoryPosition]
-        appStateLiveData.value =
-                MainAppState.OnMovieItemClicked(Event(moviesWithCategory.movies[moviePosition].id))
+        _openMovieEvent.value = Event(moviesWithCategory.movies[moviePosition].id)
     }
 
     override fun onCleared() {

@@ -95,6 +95,9 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
         scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
         scrollStateHolder.restoreScrollState(binding.recyclerView, this)
+        viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { showDetail(it) }
+        })
 
         activity?.registerReceiver(
             connectivityReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -126,13 +129,6 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
                 main.showSnackbar(R.string.error_message, R.string.button_reload) {
                     viewModel.getAppStateLiveData()
                 }
-            }
-            is MainAppState.OnMovieItemClicked -> {
-                binding.apply {
-                    loadingProgress.visibility = View.INVISIBLE
-                    recyclerView.visibility = View.VISIBLE
-                }
-                state.movieId.getContentIfNotHandled()?.let { showDetail(it) }
             }
         }
     }
