@@ -1,22 +1,24 @@
 package com.headmostlab.findmovie.ui.viewmodel.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import androidx.paging.rxjava2.cachedIn
 import com.headmostlab.findmovie.Event
+import com.headmostlab.findmovie.data.repository.PagingRepository
 import com.headmostlab.findmovie.data.repository.Repository
 import com.headmostlab.findmovie.domain.entity.MovieCategory
 import com.headmostlab.findmovie.domain.entity.MovieWithCategory
-import io.reactivex.Observable
+import com.headmostlab.findmovie.domain.entity.ShortMovie
+import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class MainViewModel(
     private val repository: Repository,
+    private val pagingRepository: PagingRepository,
     private val appStateLiveData: MutableLiveData<MainAppState> = MutableLiveData(),
     private val disposables: CompositeDisposable = CompositeDisposable(),
-    private val moviesWithCategories: ArrayList<MovieWithCategory> = ArrayList()
+    private var uiMovieCollections: List<UiMovieCollection> = emptyList()
 ) :
     ViewModel() {
 
@@ -27,27 +29,24 @@ class MainViewModel(
     fun getAppStateLiveData(): LiveData<MainAppState> = appStateLiveData.also { loadMovies() }
 
     private fun loadMovies(reload: Boolean = false) {
-        if (!reload) {
-            appStateLiveData.value = if (moviesWithCategories.isEmpty()) {
-                MainAppState.Loading
-            } else {
-                MainAppState.MoviesLoaded(moviesWithCategories)
-            }
-        }
-
         if (reload || disposables.size() == 0) {
-            moviesWithCategories.clear()
             appStateLiveData.value = MainAppState.Loading
-            Observable.fromIterable(repository.getMovieCategories())
-                .flatMap { getMovies(it).toObservable() }
-                .subscribeOn(Schedulers.io())
+
+            repository.getCollections().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ item ->
-                    moviesWithCategories.add(item)
-                    appStateLiveData.value =
-                        MainAppState.MoviesLoaded(moviesWithCategories.toList())
-                }, { appStateLiveData.postValue(MainAppState.LoadingError(it)) })
-                .also { disposables.add(it) }
+                .subscribe { collections ->
+                    val uiMovieCollections = collections.map { collection ->
+                        UiMovieCollection(
+                            collection.titleResId,
+                            pagingRepository.getMovies(collection.id, collection.request)
+                                .cachedIn(viewModelScope)
+                                .toLiveData(),
+                            collection.request == MovieCategory.UPCOMING.request
+                        )
+                    }
+                    this.uiMovieCollections = uiMovieCollections
+                    appStateLiveData.value = MainAppState.Loaded(uiMovieCollections)
+                }.also { disposables.add(it) }
         }
     }
 
@@ -57,9 +56,8 @@ class MainViewModel(
         MovieCategory.UPCOMING -> repository.getUpcomingMovies()
     }.map { movies -> MovieWithCategory(category, movies) }
 
-    fun clickMovieItem(categoryPosition: Int, moviePosition: Int) {
-        val moviesWithCategory = moviesWithCategories[categoryPosition]
-        _openMovieEvent.value = Event(moviesWithCategory.movies[moviePosition].id)
+    fun clickMovieItem(movie: ShortMovie) {
+        _openMovieEvent.value = Event(movie.id)
     }
 
     override fun onCleared() {

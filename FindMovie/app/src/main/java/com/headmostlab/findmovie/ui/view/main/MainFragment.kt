@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
+import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
@@ -34,19 +36,17 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
 
     private lateinit var scrollStateHolder: ScrollStateHolder
 
-    private val storedAdapter by lazy {
-        CategoryAdapter(object : OnItemClickedListener {
-            override fun clicked(categoryPosition: Int, moviePosition: Int) {
-                viewModel.clickMovieItem(categoryPosition, moviePosition)
-            }
-        }, scrollStateHolder)
-    }
+    private lateinit var adapter: CategoryAdapter
 
     private val viewModel: MainViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
         val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
-        val repository =/* MockRepository()*/ RepositoryImpl(dataSource)
-        ViewModelProvider(this, MainViewModelFactory(repository)).get(MainViewModel::class.java)
+        val db = App.instance.database
+        val repository = RepositoryImpl(dataSource, db)
+        val pagingRepository = PagingRepositoryImpl(service, db)
+        ViewModelProvider(this, MainViewModelFactory(repository, pagingRepository)).get(
+            MainViewModel::class.java
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -68,8 +68,9 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        adapter = createAdapter()
         with(binding.recyclerView) {
-            adapter = storedAdapter
+            adapter = this@MainFragment.adapter
             addDivider()
         }
         viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
@@ -78,6 +79,15 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
         viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let { showDetail(it) }
         })
+    }
+
+    private fun createAdapter() = CategoryAdapter(
+        { viewModel.clickMovieItem(it) },
+        scrollStateHolder, viewLifecycleOwner
+    ) {
+        binding.recyclerView.showSnackbar(R.string.error_message, R.string.button_reload) {
+            viewModel.getAppStateLiveData()
+        }
     }
 
     override fun onDestroyView() {
@@ -91,14 +101,14 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
                 loadingProgress.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
             }
-            is MainAppState.MoviesLoaded -> {
-                storedAdapter.movieCategories = state.movies
+            is MainAppState.Loaded -> {
+                adapter.movieCollection = state.movies
                 binding.apply {
                     loadingProgress.visibility = View.INVISIBLE
                     recyclerView.visibility = View.VISIBLE
                 }
             }
-            is MainAppState.LoadingError -> binding.apply {
+            is MainAppState.Error -> binding.apply {
                 loadingProgress.visibility = View.INVISIBLE
                 main.showSnackbar(R.string.error_message, R.string.button_reload) {
                     viewModel.getAppStateLiveData()
@@ -114,10 +124,6 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
                 .addToBackStack("")
                 .commit()
         }
-    }
-
-    interface OnItemClickedListener {
-        fun clicked(categoryPosition: Int, moviePosition: Int)
     }
 
     override fun getScrollStateKey() = MAIN_RECYCLER_VIEW

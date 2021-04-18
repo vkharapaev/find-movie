@@ -1,9 +1,9 @@
 package com.headmostlab.findmovie.ui.viewmodel.main
 
-import com.headmostlab.findmovie.domain.entity.MovieWithCategory
+import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 
 sealed class MainAppState {
-    data class MoviesLoaded(val movies: List<MovieWithCategory>) : MainAppState()
-    data class LoadingError(val error: Throwable) : MainAppState()
+    data class Loaded(val movies: List<UiMovieCollection>) : MainAppState()
+    data class Error(val error: Throwable) : MainAppState()
     object Loading : MainAppState()
 }

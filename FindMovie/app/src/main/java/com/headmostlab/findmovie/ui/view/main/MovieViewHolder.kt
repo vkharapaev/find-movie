@@ -6,9 +6,8 @@ import com.headmostlab.findmovie.domain.entity.ShortMovie
 
 abstract class MovieViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     abstract fun bind(
-            listener: MainFragment.OnItemClickedListener,
-            categoryPosition: Int,
-            movie: ShortMovie
+            listener: (ShortMovie) -> Unit,
+            movie: ShortMovie?
     )
 
     abstract fun onRecycled()

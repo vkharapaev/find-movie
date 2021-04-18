@@ -1,5 +1,6 @@
 package com.headmostlab.findmovie.data.datasource.network
 
+import com.headmostlab.findmovie.data.datasource.local.entities.Collection
 import com.headmostlab.findmovie.domain.entity.FullMovie
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiService

@@ -2,35 +2,39 @@ package com.headmostlab.findmovie.ui.view.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.databinding.MovieCategoryRowItemBinding
-import com.headmostlab.findmovie.domain.entity.MovieWithCategory
+import com.headmostlab.findmovie.domain.entity.ShortMovie
+import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 import com.rubensousa.recyclerview.ScrollStateHolder
 
 class CategoryAdapter(
-    private val listener: MainFragment.OnItemClickedListener,
-    private val scrollHolder: ScrollStateHolder
+    private val listener: (ShortMovie) -> Unit,
+    private val scrollHolder: ScrollStateHolder,
+    private val lifecycleOwner: LifecycleOwner,
+    private val pagerErrorHandler: (Throwable) -> Unit
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var movieCategories: List<MovieWithCategory> = ArrayList()
+    var movieCollection: List<UiMovieCollection> = ArrayList()
         set(value) {
-            val start = field.size
-            val count = value.size - field.size
             field = value
-            notifyItemRangeChanged(start, count)
+            notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         CategoryViewHolder(
             MovieCategoryRowItemBinding.inflate(LayoutInflater.from(parent.context)),
             scrollHolder,
-            listener
+            listener,
+            lifecycleOwner,
+            pagerErrorHandler
         )
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is CategoryViewHolder -> holder.bind(movieCategories[position])
+            is CategoryViewHolder -> holder.bind(movieCollection[position])
         }
     }
 
@@ -42,7 +46,7 @@ class CategoryAdapter(
     }
 
     override fun getItemCount(): Int {
-        return movieCategories.size
+        return movieCollection.size
     }
 
 }

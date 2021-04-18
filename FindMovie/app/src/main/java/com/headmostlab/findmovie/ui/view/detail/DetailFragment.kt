@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
@@ -30,7 +31,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     private val viewModel: DetailViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
         val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
-        val repository = /*MockRepository()*/ RepositoryImpl(dataSource)
+        val repository = /*MockRepository()*/ RepositoryImpl(dataSource, App.instance.database)
         ViewModelProvider(this, DetailViewModelFactory(repository)).get(DetailViewModel::class.java)
     }
 
