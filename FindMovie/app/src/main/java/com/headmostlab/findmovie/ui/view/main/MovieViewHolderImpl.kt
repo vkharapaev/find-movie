@@ -28,7 +28,11 @@ class MovieViewHolderImpl(
             with(binding) {
                 movieId.text = movie.id.toString()
                 title.text = movie.title
-                year.text = movie.date.substring(0..3)
+                year.text = if (movie.date.length >= 3) {
+                    movie.date.substring(0..3)
+                } else {
+                    movie.date
+                }
                 rating.text = movie.rating.toString()
                 poster.text = movie.poster
                 root.setOnClickListener { listener(movie) }

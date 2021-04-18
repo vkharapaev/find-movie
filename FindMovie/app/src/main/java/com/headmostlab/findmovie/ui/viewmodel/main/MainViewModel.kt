@@ -50,12 +50,6 @@ class MainViewModel(
         }
     }
 
-    private fun getMovies(category: MovieCategory) = when (category) {
-        MovieCategory.POPULAR -> repository.getPopularMovies()
-        MovieCategory.NOW_PLAYING -> repository.getNowPlayingMovies()
-        MovieCategory.UPCOMING -> repository.getUpcomingMovies()
-    }.map { movies -> MovieWithCategory(category, movies) }
-
     fun clickMovieItem(movie: ShortMovie) {
         _openMovieEvent.value = Event(movie.id)
     }
