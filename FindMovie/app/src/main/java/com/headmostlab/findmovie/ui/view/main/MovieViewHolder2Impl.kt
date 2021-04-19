@@ -2,6 +2,7 @@ package com.headmostlab.findmovie.ui.view.main
 
 import android.view.View
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbImageHostProvider
@@ -35,7 +36,7 @@ class MovieViewHolder2Impl(
 
             val imageUrl = TMDbImageHostProvider().getHostUrl() + movie.poster
 
-            GlideApp.with(binding.root.context)
+            GlideApp.with(App.instance)
                 .load(imageUrl)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.posterImage)
@@ -43,6 +44,6 @@ class MovieViewHolder2Impl(
     }
 
     override fun onRecycled() {
-        GlideApp.with(binding.root.context).clear(binding.posterImage)
+        GlideApp.with(App.instance).clear(binding.posterImage)
     }
 }
