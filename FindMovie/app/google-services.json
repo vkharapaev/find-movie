@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "252432654249",
+    "project_id": "find-movie-d0bff",
+    "storage_bucket": "find-movie-d0bff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252432654249:android:5acaa8b5a76cb892cf6eb8",
+        "android_client_info": {
+          "package_name": "com.headmostlab.findmovie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252432654249-h1smajlsvbj4j2s1g08mv3gd6khhto26.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqYoeHbH6YU91-iLYbqagrNYvM8z6L4lo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252432654249-h1smajlsvbj4j2s1g08mv3gd6khhto26.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
