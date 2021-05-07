@@ -5,8 +5,7 @@ import androidx.paging.rxjava2.cachedIn
 import com.headmostlab.findmovie.Event
 import com.headmostlab.findmovie.data.repository.PagingRepository
 import com.headmostlab.findmovie.data.repository.Repository
-import com.headmostlab.findmovie.domain.entity.MovieCategory
-import com.headmostlab.findmovie.domain.entity.MovieWithCategory
+import com.headmostlab.findmovie.domain.entity.ECollection
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,36 +15,40 @@ import io.reactivex.schedulers.Schedulers
 class MainViewModel(
     private val repository: Repository,
     private val pagingRepository: PagingRepository,
-    private val appStateLiveData: MutableLiveData<MainAppState> = MutableLiveData(),
-    private val disposables: CompositeDisposable = CompositeDisposable(),
-    private var uiMovieCollections: List<UiMovieCollection> = emptyList()
-) :
-    ViewModel() {
+    private val appStateLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData(),
+    private val disposables: CompositeDisposable = CompositeDisposable()
+) : ViewModel() {
+
+    private companion object {
+        const val MAX_MOVIE_COUNT_IN_ROW = 20
+    }
 
     private val _openMovieEvent: MutableLiveData<Event<Int>> = MutableLiveData()
     val openMovieEvent: LiveData<Event<Int>>
         get() = _openMovieEvent
 
-    fun getAppStateLiveData(): LiveData<MainAppState> = appStateLiveData.also { loadMovies() }
+    fun getAppStateLiveData(): LiveData<List<UiMovieCollection>> =
+        appStateLiveData.also { loadMovies() }
 
-    private fun loadMovies(reload: Boolean = false) {
+    fun loadMovies(reload: Boolean = false) {
         if (reload || disposables.size() == 0) {
-            appStateLiveData.value = MainAppState.Loading
+            disposables.clear()
 
             repository.getCollections().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { collections ->
-                    val uiMovieCollections = collections.map { collection ->
+                    appStateLiveData.value = collections.map { collection ->
                         UiMovieCollection(
-                            collection.titleResId,
-                            pagingRepository.getMovies(collection.id, collection.request)
-                                .cachedIn(viewModelScope)
-                                .toLiveData(),
-                            collection.request == MovieCategory.UPCOMING.request
+                            collection.id,
+                            ECollection.valueOf(collection.collectionRid).title,
+                            pagingRepository.getMovies(
+                                collection.id,
+                                collection.request,
+                                MAX_MOVIE_COUNT_IN_ROW
+                            ).cachedIn(viewModelScope).toLiveData(),
+                            collection.request == ECollection.UPCOMING.request
                         )
                     }
-                    this.uiMovieCollections = uiMovieCollections
-                    appStateLiveData.value = MainAppState.Loaded(uiMovieCollections)
                 }.also { disposables.add(it) }
         }
     }

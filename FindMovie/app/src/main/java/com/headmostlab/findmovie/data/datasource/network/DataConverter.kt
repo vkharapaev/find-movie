@@ -9,7 +9,7 @@ import com.headmostlab.findmovie.domain.entity.ShortMovie
 
 object DataConverter {
 
-    private val dummyShortMovie = ShortMovie(0, "", "", 0.0, 0.0, "")
+    private val dummyShortMovie = ShortMovie(0, "", "", 0.0, 0.0, "", "")
 
     fun map(movies: ApiMovies): List<ShortMovie> =
         movies.results.map { map(it) }.filter { it != dummyShortMovie }
@@ -22,7 +22,8 @@ object DataConverter {
                 movie.releaseDate,
                 movie.voteAverage,
                 movie.popularity,
-                movie.posterPath
+                movie.posterPath,
+                movie.backdropPath
             )
         } catch (e: Throwable) {
             return dummyShortMovie

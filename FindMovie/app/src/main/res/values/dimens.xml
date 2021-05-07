@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="default_margin">16dp</dimen>
-    <dimen name="poster_width">154dp</dimen>
-    <dimen name="poster_height">231dp</dimen>
+    <dimen name="large_margin">16dp</dimen>
+    <dimen name="narrow_poster_width">154dp</dimen>
+    <dimen name="narrow_poster_height">231dp</dimen>
+    <dimen name="wide_poster_width">250dp</dimen>
+    <dimen name="wide_poster_height">140dp</dimen>
+    <dimen name="smallest_margin">4dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
+    <dimen name="card_radius">10dp</dimen>
+    <dimen name="top_margin">40dp</dimen>
+    <dimen name="bottom_margin">20dp</dimen>
 </resources>

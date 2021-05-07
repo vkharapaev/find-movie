@@ -22,11 +22,13 @@ class PagingRepositoryImpl(
     @ExperimentalPagingApi
     override fun getMovies(
         collectionId: Int,
-        movieQuery: String
+        movieQuery: String,
+        count: Int
     ): Flowable<PagingData<ShortMovie>> {
-        val mediator = MovieRemoteMediator(movieQuery, service, db, TMDbApiKeyProvider())
+        val mediator =
+            MovieRemoteMediator(movieQuery, service, db, TMDbApiKeyProvider(), count / PAGE_SIZE)
         val pager = Pager(PagingConfig(PAGE_SIZE), remoteMediator = mediator) {
-            db.movieDao().pagingSource(collectionId)
+            db.movieDao().pagingSource(collectionId, count)
         }
         return pager.flowable.map { pagingData -> pagingData.map { DataConverter.map(it) } }
     }

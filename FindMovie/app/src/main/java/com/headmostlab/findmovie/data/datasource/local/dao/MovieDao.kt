@@ -10,7 +10,7 @@ import io.reactivex.Single
 
 @Dao
 interface MovieDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(movies: List<Movie>)
 
     @Query("DELETE FROM Movie")
@@ -19,7 +19,6 @@ interface MovieDao {
     @Query("SELECT * FROM Movie")
     fun getAllMovies(): Single<List<Movie>>
 
-    @Query("SELECT m.* from CollectionMovieCrossRef ref INNER JOIN Movie m on ref.movieId = m.id " +
-            "WHERE ref.collectionId = :collectionId ORDER BY m.popularity DESC")
-    fun pagingSource(collectionId: Int): PagingSource<Int, Movie>
+    @Query("SELECT m.* from CollectionMovieCrossRef ref INNER JOIN Movie m on ref.movieId = m.id WHERE ref.collectionId = :collectionId ORDER BY m.popularity DESC limit :maxCount")
+    fun pagingSource(collectionId: Int, maxCount: Int = 500): PagingSource<Int, Movie>
 }

@@ -22,8 +22,13 @@ class MovieRemoteMediator(
     private val query: String,
     private val service: TMDbApiService,
     private val db: RoomDb,
-    private val keyProvider: TMDbApiKeyProvider
+    private val keyProvider: TMDbApiKeyProvider,
+    private val maxPageCount: Int? = null
 ) : RxRemoteMediator<Int, Movie>() {
+
+    private companion object {
+        private const val INITIAL_PAGE_NUMBER = 1
+    }
 
     private val movieDao = db.movieDao()
     private val remoteKeyDao = db.remoteKeyDao()
@@ -43,13 +48,15 @@ class MovieRemoteMediator(
             APPEND -> db.remoteKeyDao().get(remoteKeyLabel)
         }
         return remoteKeySingle.subscribeOn(Schedulers.io())
-            .onErrorResumeNext() {
-                val remoteKey = RemoteKey(query, 1)
-                remoteKeyDao.insertOrReplace(remoteKey)
-                Single.just(remoteKey)
+            .onErrorResumeNext {
+                Single.just(RemoteKey(query, null))
             }
             .flatMap { remoteKey ->
-                val curKey = remoteKey.nextKey ?: 1
+                val curKey = remoteKey.nextKey ?: INITIAL_PAGE_NUMBER
+
+                if (maxPageCount != null && curKey > maxPageCount) {
+                    return@flatMap Single.just(MediatorResult.Success(true))
+                }
 
                 service.getMovies(query, keyProvider.getApiKey(), curKey)
                     .map { NetworkDataConverter.map(it) }
@@ -65,11 +72,9 @@ class MovieRemoteMediator(
                                 collectionMovieCrossRefDao.delete(collection.id)
                                 remoteKeyDao.delete(remoteKeyLabel)
                             }
-                            val nextKey = curKey + if (movies.isEmpty()) {
-                                0
-                            } else {
-                                1
-                            }
+
+                            val nextKey = curKey + if (movies.isEmpty()) 0 else 1
+
                             remoteKeyDao.insertOrReplace(RemoteKey(remoteKeyLabel, nextKey))
                             movieDao.insertAll(LocalDataConverter.map(movies))
                             collectionMovieCrossRefDao.insertAll(collectionMovieCrossRefs)

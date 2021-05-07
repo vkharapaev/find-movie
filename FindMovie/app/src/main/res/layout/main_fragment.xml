@@ -5,21 +5,24 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/default_margin"
-    android:layout_marginEnd="@dimen/default_margin"
+    android:animateLayoutChanges="true"
     tools:context=".ui.view.main.MainFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:layout_marginTop="@dimen/top_margin"
+        tools:listitem="@layout/collection_row_item" />
 
     <ProgressBar
         android:id="@+id/loadingProgress"
         style="?android:progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
 </FrameLayout>

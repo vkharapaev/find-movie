@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0cb269ba27ed1cb843a11424aa36bbeb",
+    "identityHash": "4e86a80d293675195a68350ed0e9a2a0",
     "entities": [
       {
         "tableName": "Collection",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `titleResId` INTEGER NOT NULL, `request` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `collectionRid` TEXT NOT NULL, `request` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -15,9 +15,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "titleResId",
-            "columnName": "titleResId",
-            "affinity": "INTEGER",
+            "fieldPath": "collectionRid",
+            "columnName": "collectionRid",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -47,7 +47,7 @@
       },
       {
         "tableName": "Movie",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `date` TEXT NOT NULL, `rating` REAL NOT NULL, `popularity` REAL NOT NULL, `poster` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `date` TEXT NOT NULL, `rating` REAL NOT NULL, `popularity` REAL NOT NULL, `poster` TEXT, `backdrop` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -82,6 +82,12 @@
           {
             "fieldPath": "poster",
             "columnName": "poster",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "backdrop",
+            "columnName": "backdrop",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -119,7 +125,24 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_CollectionMovieCrossRef_collectionId",
+            "unique": false,
+            "columnNames": [
+              "collectionId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CollectionMovieCrossRef_collectionId` ON `${TABLE_NAME}` (`collectionId`)"
+          },
+          {
+            "name": "index_CollectionMovieCrossRef_movieId",
+            "unique": false,
+            "columnNames": [
+              "movieId"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_CollectionMovieCrossRef_movieId` ON `${TABLE_NAME}` (`movieId`)"
+          }
+        ],
         "foreignKeys": [
           {
             "table": "Collection",
@@ -175,7 +198,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0cb269ba27ed1cb843a11424aa36bbeb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4e86a80d293675195a68350ed0e9a2a0')"
     ]
   }
 }
