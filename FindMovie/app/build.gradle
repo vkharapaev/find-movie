@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -10,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.headmostlab.findmovie"
-        minSdkVersion 22
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -77,6 +78,8 @@ dependencies {
     // Paging
     implementation "androidx.paging:paging-runtime-ktx:3.0.0-beta03"
     implementation "androidx.paging:paging-rxjava2-ktx:3.0.0-beta03"
+
+    implementation 'com.google.firebase:firebase-messaging:21.1.0'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
