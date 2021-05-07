@@ -21,7 +21,6 @@ class MovieAdapter(
             R.layout.movie_row_item2 -> MovieViewHolder2Impl(view)
             else -> MovieViewHolderImpl(view)
         }
-        return MovieViewHolderImpl(view)
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {

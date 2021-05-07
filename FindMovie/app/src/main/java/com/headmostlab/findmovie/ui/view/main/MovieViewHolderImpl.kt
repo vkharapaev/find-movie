@@ -2,6 +2,8 @@ package com.headmostlab.findmovie.ui.view.main
 
 import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.GlideApp
@@ -23,33 +25,34 @@ class MovieViewHolderImpl(
 
         if (movie == null) {
             GlideApp.with(binding.root.context)
-                .load(R.drawable.dummy_movie)
+                .load(R.drawable.bg_item_placeholder)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.posterImage)
         } else {
             with(binding) {
-                movieId.text = movie.id.toString()
                 title.text = movie.title
-                year.text = if (movie.date.length >= 3) {
-                    movie.date.substring(0..3)
-                } else {
-                    movie.date
-                }
-                rating.text = movie.rating.toString()
-                poster.text = movie.poster
                 root.setOnClickListener { listener(movie) }
             }
 
             val imageUrl = TMDbImageHostProvider().getHostUrl() + movie.poster
 
+            val resources = binding.root.resources
             GlideApp.with(App.instance)
                 .load(imageUrl)
+                .override(
+                    resources.getDimensionPixelSize(R.dimen.narrow_poster_width),
+                    resources.getDimensionPixelSize(R.dimen.narrow_poster_height)
+                )
+                .transform(
+                    CenterCrop(),
+                    RoundedCorners(resources.getDimensionPixelSize(R.dimen.card_radius))
+                ).placeholder(R.drawable.bg_item_placeholder)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(binding.posterImage)
         }
     }
 
     override fun onRecycled() {
-            GlideApp.with(App.instance).clear(binding.posterImage)
+        GlideApp.with(App.instance).clear(binding.posterImage)
     }
 }

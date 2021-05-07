@@ -6,7 +6,7 @@ import com.headmostlab.findmovie.domain.entity.ShortMovie
 object DataConverter {
 
     fun map(movie: ShortMovie) =
-        Movie(movie.id, movie.title, movie.date, movie.rating, movie.popularity, movie.poster)
+        Movie(movie.id, movie.title, movie.date, movie.rating, movie.popularity, movie.poster, movie.backdrop)
 
     fun map(movies: List<ShortMovie>): List<Movie> = movies.map { map(it) }
 
@@ -17,6 +17,7 @@ object DataConverter {
             movie.date,
             movie.rating,
             movie.popularity,
-            movie.poster
+            movie.poster,
+            movie.backdrop
         )
 }

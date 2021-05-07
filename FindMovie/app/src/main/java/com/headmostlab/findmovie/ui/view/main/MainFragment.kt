@@ -1,10 +1,12 @@
 package com.headmostlab.findmovie.ui.view.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
@@ -16,27 +18,28 @@ import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
+import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.addDivider
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
-import com.headmostlab.findmovie.ui.viewmodel.main.MainAppState
+import com.headmostlab.findmovie.ui.view.utils.viewBinding
 import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModel
 import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModelFactory
 import com.rubensousa.recyclerview.ScrollStateHolder
+import java.io.IOException
+import java.util.*
 
-class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
+class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollStateKeyProvider {
 
     companion object {
         fun newInstance() = MainFragment()
         private const val MAIN_RECYCLER_VIEW = "MAIN_RECYCLER_VIEW"
     }
 
-    private var _binding: MainFragmentBinding? = null
-
-    private val binding get() = _binding!!
+    private val binding by viewBinding(MainFragmentBinding::bind)
 
     private lateinit var scrollStateHolder: ScrollStateHolder
 
-    private lateinit var adapter: CategoryAdapter
+    private lateinit var adapter: CollectionAdapter
 
     private val viewModel: MainViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
@@ -54,66 +57,69 @@ class MainFragment : Fragment(), ScrollStateHolder.ScrollStateKeyProvider {
         scrollStateHolder.onSaveInstanceState(outState)
     }
 
+    private var noInternet = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         scrollStateHolder = ScrollStateHolder(savedInstanceState)
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = MainFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        setFragmentResultListener("RETRY_TO_CONNECT") { requestKey, bundle ->
+            viewModel.loadMovies(true)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        noInternet = false
         adapter = createAdapter()
+
         with(binding.recyclerView) {
             adapter = this@MainFragment.adapter
             addDivider()
         }
-        viewModel.getAppStateLiveData().observe(viewLifecycleOwner, { renderAppState(it) })
+        viewModel.getAppStateLiveData()
+            .observe(viewLifecycleOwner, { adapter.movieCollection = it })
         scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
         scrollStateHolder.restoreScrollState(binding.recyclerView, this)
         viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let { showDetail(it) }
         })
-    }
 
-    private fun createAdapter() = CategoryAdapter(
-        { viewModel.clickMovieItem(it) },
-        scrollStateHolder, viewLifecycleOwner
-    ) {
-        binding.recyclerView.showSnackbar(R.string.error_message, R.string.button_reload) {
-            viewModel.getAppStateLiveData()
+        ViewCompat.requestApplyInsets(view)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.recyclerView) { _, inset ->
+            val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.recyclerView.updatePadding(
+                left = systemInsets.left,
+                right = systemInsets.right,
+                top = systemInsets.top + resources.getDimensionPixelSize(R.dimen.top_margin),
+                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.bottom_margin)
+            )
+            inset
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+    private fun createAdapter() = CollectionAdapter(
+        { viewModel.clickMovieItem(it) },
+        scrollStateHolder, viewLifecycleOwner
+    ) {
 
-    private fun renderAppState(state: MainAppState) {
-        when (state) {
-            MainAppState.Loading -> binding.apply {
-                loadingProgress.visibility = View.VISIBLE
-                recyclerView.visibility = View.INVISIBLE
-            }
-            is MainAppState.Loaded -> {
-                adapter.movieCollection = state.movies
-                binding.apply {
-                    loadingProgress.visibility = View.INVISIBLE
-                    recyclerView.visibility = View.VISIBLE
+        when (it) {
+            is IOException -> {
+                if (!noInternet) {
+                    noInternet = true
+                    parentFragmentManager.beginTransaction().apply {
+                        replace(R.id.container, NoInternetFragment.newInstance())
+                        addToBackStack(null)
+                    }.commit()
                 }
             }
-            is MainAppState.Error -> binding.apply {
-                loadingProgress.visibility = View.INVISIBLE
-                main.showSnackbar(R.string.error_message, R.string.button_reload) {
-                    viewModel.getAppStateLiveData()
+            else ->
+                binding.recyclerView.showSnackbar(
+                    it.message ?: getString(R.string.error_message),
+                    getString(R.string.button_reload)
+                ) {
+                    viewModel.loadMovies(true)
                 }
-            }
         }
     }
 

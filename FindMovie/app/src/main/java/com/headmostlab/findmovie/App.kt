@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.headmostlab.findmovie.data.datasource.local.RoomDb
 import com.headmostlab.findmovie.data.datasource.local.entities.Collection
-import com.headmostlab.findmovie.domain.entity.MovieCategory
+import com.headmostlab.findmovie.domain.entity.ECollection
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
@@ -23,8 +23,8 @@ class App : Application() {
 
     private fun createCollectionTypes() {
         Single.fromCallable {
-            val collections = MovieCategory.values()
-                .map { Collection(it.ordinal + 1, it.title, it.request) }
+            val collections = ECollection.values()
+                .map { Collection(it.ordinal + 1, it.name, it.request) }
 
             database.collectionDao().insertAll(collections)
         }.subscribeOn(Schedulers.io()).subscribe()

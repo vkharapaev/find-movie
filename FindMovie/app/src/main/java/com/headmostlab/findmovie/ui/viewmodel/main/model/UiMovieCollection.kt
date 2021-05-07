@@ -5,6 +5,7 @@ import androidx.paging.PagingData
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 
 data class UiMovieCollection(
+    val id: Int,
     val title: Int,
     val movies: LiveData<PagingData<ShortMovie>>,
     val showSecondLayout: Boolean = false

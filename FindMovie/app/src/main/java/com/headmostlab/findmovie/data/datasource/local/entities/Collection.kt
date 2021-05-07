@@ -8,6 +8,6 @@ import androidx.room.PrimaryKey
 data class Collection(
     @PrimaryKey
     val id: Int,
-    val titleResId: Int,
+    val collectionRid: String,
     val request: String
 )

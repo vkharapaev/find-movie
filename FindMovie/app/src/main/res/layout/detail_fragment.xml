@@ -4,8 +4,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/default_margin"
-    android:layout_marginEnd="@dimen/default_margin"
+    android:layout_marginStart="@dimen/large_margin"
+    android:layout_marginEnd="@dimen/large_margin"
     tools:context=".ui.view.detail.DetailFragment">
 
     <LinearLayout
@@ -34,8 +34,8 @@
 
             <ImageView
                 android:id="@+id/poster"
-                android:layout_width="@dimen/poster_width"
-                android:layout_height="@dimen/poster_height"
+                android:layout_width="@dimen/narrow_poster_width"
+                android:layout_height="@dimen/narrow_poster_height"
                 tools:srcCompat="@drawable/dummy_movie" />
 
             <LinearLayout

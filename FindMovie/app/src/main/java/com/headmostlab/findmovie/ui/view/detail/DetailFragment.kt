@@ -58,7 +58,10 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
             is DetailAppState.LoadingError -> {
                 binding.apply {
                     loadingProgress.visibility = View.INVISIBLE
-                    main.showSnackbar(R.string.error_message, R.string.button_reload) {
+                    main.showSnackbar(
+                        state.error.message ?: getString(R.string.error_message),
+                        getString(R.string.button_reload)
+                    ) {
                         viewModel.getAppState(storedMovieId)
                     }
                 }

@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="purple_900">#ff271f52</color>
+    <color name="purple_900_opaque">#aa271f52</color>
+    <color name="purple_dark">#ff19153a</color>
+
+    <color name="status_bar_scrim">@color/purple_900_opaque</color>
+    <color name="nav_bar_scrim">@color/purple_900_opaque</color>
+    <color name="placeholder">@color/purple_900</color>
 </resources>

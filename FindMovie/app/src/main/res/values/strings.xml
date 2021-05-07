@@ -4,10 +4,10 @@
     <string name="button_reload">Reload</string>
     <string name="detail_fragment_movie_id_is_null">Movie id must be specified</string>
 
-    <string name="movie_category_now_playing">Now Playing</string>
-    <string name="movie_category_popular">Popular</string>
-    <string name="movie_category_upcoming">Upcoming</string>
-    <string name="movie_category_top_rated">Top Rated</string>
+    <string name="movie_collection_now_playing">Now Playing</string>
+    <string name="movie_collection_popular">Popular</string>
+    <string name="movie_collection_upcoming">Upcoming</string>
+    <string name="movie_collection_top_rated">Top Rated</string>
 
     <string name="detail_revenue">Revenue: %s</string>
     <string name="detail_budget">Budget: %s</string>
@@ -16,4 +16,7 @@
 
     <string name="connection_lost">Connection lost</string>
     <string name="connection_found">Connection found</string>
+
+    <string name="retry">Retry</string>
+    <string name="not_internet_connection">Not internet connection</string>
 </resources>
