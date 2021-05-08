@@ -3,8 +3,6 @@ package com.headmostlab.findmovie.ui.view.main
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.Toast
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateMargins
@@ -12,7 +10,6 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ConcatAdapter
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
