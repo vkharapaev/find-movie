@@ -17,9 +17,8 @@ class MovieAdapter(
         val inflater = LayoutInflater.from(parent.context)
         val view = inflater.inflate(viewType, parent, false)
         return when (viewType) {
-            R.layout.movie_row_item -> MovieViewHolderImpl(view)
-            R.layout.movie_row_item2 -> MovieViewHolder2Impl(view)
-            else -> MovieViewHolderImpl(view)
+            R.layout.narrow_movie_row_item -> NarrowMovieViewHolder(view)
+            else -> WideMovieViewHolder(view)
         }
     }
 
@@ -28,8 +27,8 @@ class MovieAdapter(
     }
 
     override fun getItemViewType(position: Int) = when (secondLayout) {
-        false -> R.layout.movie_row_item
-        true -> R.layout.movie_row_item2
+        false -> R.layout.narrow_movie_row_item
+        true -> R.layout.wide_movie_row_item
     }
 
     override fun onViewRecycled(holder: MovieViewHolder) {

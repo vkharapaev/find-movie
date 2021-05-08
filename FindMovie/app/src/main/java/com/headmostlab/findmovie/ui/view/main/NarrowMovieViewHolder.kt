@@ -1,7 +1,6 @@
 package com.headmostlab.findmovie.ui.view.main
 
 import android.view.View
-import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -9,12 +8,12 @@ import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbImageHostProvider
-import com.headmostlab.findmovie.databinding.MovieRowItemBinding
+import com.headmostlab.findmovie.databinding.NarrowMovieRowItemBinding
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 
-class MovieViewHolderImpl(
+class NarrowMovieViewHolder(
     private val view: View,
-    private val binding: MovieRowItemBinding = MovieRowItemBinding.bind(view)
+    private val binding: NarrowMovieRowItemBinding = NarrowMovieRowItemBinding.bind(view)
 ) :
     MovieViewHolder(view) {
 
@@ -22,7 +21,6 @@ class MovieViewHolderImpl(
         listener: (ShortMovie) -> Unit,
         movie: ShortMovie?
     ) {
-
         if (movie == null) {
             GlideApp.with(binding.root.context)
                 .load(R.drawable.bg_item_placeholder)

@@ -8,12 +8,12 @@ import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbImageHostProvider
-import com.headmostlab.findmovie.databinding.MovieRowItem2Binding
+import com.headmostlab.findmovie.databinding.WideMovieRowItemBinding
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 
-class MovieViewHolder2Impl(
+class WideMovieViewHolder(
     private val view: View,
-    private val binding: MovieRowItem2Binding = MovieRowItem2Binding.bind(view)
+    private val binding: WideMovieRowItemBinding = WideMovieRowItemBinding.bind(view)
 ) :
     MovieViewHolder(view) {
 
