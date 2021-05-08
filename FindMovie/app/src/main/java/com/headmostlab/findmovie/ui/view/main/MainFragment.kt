@@ -76,7 +76,7 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
             adapter = this@MainFragment.adapter
             addDivider()
         }
-        viewModel.getAppStateLiveData()
+        viewModel.getCollections()
             .observe(viewLifecycleOwner, { adapter.movieCollection = it })
         scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
         scrollStateHolder.restoreScrollState(binding.recyclerView, this)

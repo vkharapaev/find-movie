@@ -15,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 class MainViewModel(
     private val repository: Repository,
     private val pagingRepository: PagingRepository,
-    private val appStateLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData(),
+    private val uiCollectionsLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData(),
     private val disposables: CompositeDisposable = CompositeDisposable()
 ) : ViewModel() {
 
@@ -27,8 +27,8 @@ class MainViewModel(
     val openMovieEvent: LiveData<Event<Int>>
         get() = _openMovieEvent
 
-    fun getAppStateLiveData(): LiveData<List<UiMovieCollection>> =
-        appStateLiveData.also { loadMovies() }
+    fun getCollections(): LiveData<List<UiMovieCollection>> =
+        uiCollectionsLiveData.also { loadMovies() }
 
     fun loadMovies(reload: Boolean = false) {
         if (reload || disposables.size() == 0) {
@@ -37,7 +37,7 @@ class MainViewModel(
             repository.getCollections().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { collections ->
-                    appStateLiveData.value = collections.map { collection ->
+                    uiCollectionsLiveData.value = collections.map { collection ->
                         UiMovieCollection(
                             collection.id,
                             ECollection.valueOf(collection.collectionRid).title,
