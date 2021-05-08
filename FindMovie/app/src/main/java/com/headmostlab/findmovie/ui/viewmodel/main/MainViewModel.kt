@@ -24,7 +24,7 @@ class MainViewModel(
 ) : ViewModel() {
 
     private companion object {
-        const val MAX_MOVIE_COUNT_IN_ROW = 5
+        const val MAX_MOVIE_COUNT_IN_ROW = 15
     }
 
     private val _openMovieEvent: MutableLiveData<Event<Int>> = MutableLiveData()
