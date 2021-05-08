@@ -8,6 +8,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ConcatAdapter
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
@@ -70,22 +71,20 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         noInternet = false
-        adapter = createAdapter()
 
+        ViewCompat.requestApplyInsets(view)
+
+        setUpRecyclerView()
+
+        observe()
+    }
+
+    private fun setUpRecyclerView() {
+        adapter = createAdapter()
         with(binding.recyclerView) {
             adapter = this@MainFragment.adapter
             addDivider()
         }
-        viewModel.getCollections()
-            .observe(viewLifecycleOwner, { adapter.movieCollection = it })
-        scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
-        scrollStateHolder.restoreScrollState(binding.recyclerView, this)
-        viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
-            event.getContentIfNotHandled()?.let { showDetail(it) }
-        })
-
-        ViewCompat.requestApplyInsets(view)
-
         ViewCompat.setOnApplyWindowInsetsListener(binding.recyclerView) { _, inset ->
             val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.recyclerView.updatePadding(
@@ -96,6 +95,16 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
             )
             inset
         }
+        scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
+        scrollStateHolder.restoreScrollState(binding.recyclerView, this)
+    }
+
+    private fun observe() {
+        viewModel.getCollections()
+            .observe(viewLifecycleOwner, { adapter.movieCollection = it })
+        viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { showDetail(it) }
+        })
     }
 
     private fun createAdapter() = CollectionAdapter(
