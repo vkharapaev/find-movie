@@ -2,8 +2,12 @@ package com.headmostlab.findmovie.ui.view.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -18,6 +22,7 @@ import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
+import com.headmostlab.findmovie.ui.view.collection.CollectionFragment
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
 import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.addDivider
@@ -85,13 +90,23 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
             adapter = this@MainFragment.adapter
             addDivider()
         }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.header) { _, inset ->
+            val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
+            val params = binding.header.layoutParams as FrameLayout.LayoutParams
+            params.updateMargins(top = systemInsets.top)
+            inset
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(binding.recyclerView) { _, inset ->
             val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.recyclerView.updatePadding(
                 left = systemInsets.left,
                 right = systemInsets.right,
-                top = systemInsets.top + resources.getDimensionPixelSize(R.dimen.top_margin),
-                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.bottom_margin)
+                top = systemInsets.top + resources.getDimensionPixelSize(
+                    R.dimen.collection_recycler_view_top_padding
+                ),
+                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding)
             )
             inset
         }
@@ -105,10 +120,21 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
         viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let { showDetail(it) }
         })
+        viewModel.openCollectionEvent.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { showCollection(it) }
+        })
+    }
+
+    private fun showCollection(collectionId: Int) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.container, CollectionFragment.newInstance(collectionId))
+            addToBackStack(null)
+        }.commit()
     }
 
     private fun createAdapter() = CollectionAdapter(
         { viewModel.clickMovieItem(it) },
+        { viewModel.selectCollection(it) },
         scrollStateHolder, viewLifecycleOwner
     ) {
 

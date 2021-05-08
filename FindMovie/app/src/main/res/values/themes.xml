@@ -17,10 +17,24 @@
         <item name="android:navigationBarColor">@color/nav_bar_scrim</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="27">shortEdges</item>
         <item name="shapeAppearanceMediumComponent">@style/MediumComponent</item>
+        <item name="shapeAppearanceSmallComponent">@style/MediumComponent</item>
     </style>
 
     <style name="MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerSize">@dimen/card_radius</item>
+    </style>
+
+    <style name="Widget.Button.Overlay" parent="">
+        <item name="colorPrimary">@color/purple_900</item>
+        <item name="colorOnPrimary">@color/white</item>
+    </style>
+    
+    <style name="Header.ShapeAppearance.Overlay" parent="" >
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <item name="cornerSizeBottomLeft">@dimen/header_radius</item>
+        <item name="cornerSizeBottomRight">@dimen/header_radius</item>
     </style>
 
 </resources>

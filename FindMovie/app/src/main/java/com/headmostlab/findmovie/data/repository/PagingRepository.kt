@@ -6,7 +6,7 @@ import io.reactivex.Flowable
 
 interface PagingRepository {
     fun getMovies(
-        collectionId: Int, movieQuery: String,
-        count: Int = 50
+        collectionId: Int,
+        count: Int = 500
     ): Flowable<PagingData<ShortMovie>>
 }

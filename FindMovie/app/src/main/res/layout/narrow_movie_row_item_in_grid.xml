@@ -3,33 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingStart="@dimen/small_margin"
-    android:paddingEnd="@dimen/small_margin"
+    android:layout_marginStart="@dimen/small_margin"
+    android:layout_marginEnd="@dimen/small_margin"
     tools:layout_marginEnd="@dimen/large_margin">
 
     <ImageView
         android:id="@+id/posterImage"
-        android:layout_width="@dimen/wide_poster_width"
-        android:layout_height="@dimen/wide_poster_height"
+        android:layout_width="@dimen/narrow_poster_width"
+        android:layout_height="@dimen/narrow_poster_height"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@sample/wide_movie_posters" />
+        tools:scaleType="centerCrop"
+        tools:src="@sample/movie_posters" />
 
     <TextView
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/small_margin"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-light"
         android:lines="1"
         android:textSize="@dimen/text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/posterImage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/posterImage"
         app:layout_constraintTop_toBottomOf="@id/posterImage"
         tools:text="@sample/movies_names" />
 

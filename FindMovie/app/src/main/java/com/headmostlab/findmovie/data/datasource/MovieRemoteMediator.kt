@@ -8,6 +8,7 @@ import androidx.paging.rxjava2.RxRemoteMediator
 import com.headmostlab.findmovie.data.datasource.local.entities.Movie
 import com.headmostlab.findmovie.data.datasource.local.entities.RemoteKey
 import com.headmostlab.findmovie.data.datasource.local.RoomDb
+import com.headmostlab.findmovie.data.datasource.local.entities.Collection
 import com.headmostlab.findmovie.data.datasource.local.entities.CollectionMovieCrossRef
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiService
@@ -19,7 +20,7 @@ import com.headmostlab.findmovie.data.datasource.network.DataConverter as Networ
 
 @ExperimentalPagingApi
 class MovieRemoteMediator(
-    private val query: String,
+    private val collectionId: Int,
     private val service: TMDbApiService,
     private val db: RoomDb,
     private val keyProvider: TMDbApiKeyProvider,
@@ -34,7 +35,8 @@ class MovieRemoteMediator(
     private val remoteKeyDao = db.remoteKeyDao()
     private val collectionDao = db.collectionDao()
     private val collectionMovieCrossRefDao = db.collectionMovieCrossRefDao()
-    private val remoteKeyLabel = query
+    private lateinit var remoteKeyLabel: String
+    private lateinit var query: String
 
     override fun initializeSingle(): Single<InitializeAction> =
         Single.just(InitializeAction.SKIP_INITIAL_REFRESH)
@@ -42,16 +44,25 @@ class MovieRemoteMediator(
     override fun loadSingle(
         loadType: LoadType, state: PagingState<Int, Movie>
     ): Single<MediatorResult> {
-        val remoteKeySingle: Single<RemoteKey> = when (loadType) {
-            REFRESH -> Single.just(RemoteKey(remoteKeyLabel, null))
+
+        val collection: Single<Collection> = when (loadType) {
             PREPEND -> return Single.just(MediatorResult.Success(true))
-            APPEND -> db.remoteKeyDao().get(remoteKeyLabel)
+            else -> db.collectionDao().get(collectionId)
         }
-        return remoteKeySingle.subscribeOn(Schedulers.io())
+
+        return collection.subscribeOn(Schedulers.io())
+            .flatMap { collection ->
+                remoteKeyLabel = collection.request
+                query = collection.request
+
+                when (loadType) {
+                    REFRESH -> Single.just(RemoteKey(collection.request, null))
+                    else -> db.remoteKeyDao().get(collection.request) // APPEND
+                }
+            }
             .onErrorResumeNext {
                 Single.just(RemoteKey(query, null))
-            }
-            .flatMap { remoteKey ->
+            }.flatMap { remoteKey ->
                 val curKey = remoteKey.nextKey ?: INITIAL_PAGE_NUMBER
 
                 if (maxPageCount != null && curKey > maxPageCount) {
@@ -62,7 +73,7 @@ class MovieRemoteMediator(
                     .map { NetworkDataConverter.map(it) }
                     .map { movies ->
 
-                        val collection = collectionDao.get(query)
+                        val collection = collectionDao.getByRequest(query)
 
                         val collectionMovieCrossRefs =
                             movies.map { CollectionMovieCrossRef(collection.id, it.id) }

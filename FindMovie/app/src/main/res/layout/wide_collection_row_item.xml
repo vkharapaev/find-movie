@@ -34,12 +34,11 @@
             tools:listitem="@sample/recycler_view_layouts" />
 
         <include
-            android:visibility="invisible"
             android:id="@+id/shimmerLayout"
-            layout="@layout/narrow_collection_shimmer_item"
+            layout="@layout/wide_collection_shimmer_item"
+            android:visibility="invisible"
             tools:visibility="visible" />
 
     </FrameLayout>
-
 
 </LinearLayout>

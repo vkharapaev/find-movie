@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 
-abstract class MovieViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+abstract class MovieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     abstract fun bind(
             listener: (ShortMovie) -> Unit,
             movie: ShortMovie?

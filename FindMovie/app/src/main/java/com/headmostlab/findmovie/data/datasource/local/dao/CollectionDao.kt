@@ -10,7 +10,10 @@ interface CollectionDao {
     fun getAll(): Single<List<Collection>>
 
     @Query("SELECT * FROM Collection WHERE request = :rq")
-    fun get(rq: String): Collection
+    fun getByRequest(rq: String): Collection
+
+    @Query("SELECT * FROM Collection WHERE id = :id")
+    fun get(id: Int): Single<Collection>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(collections: List<Collection>)
