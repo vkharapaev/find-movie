@@ -11,3 +11,10 @@ fun RecyclerView.addDivider(orientation: Int = DividerItemDecoration.VERTICAL) {
     drawable?.let { divider.setDrawable(it) }
     addItemDecoration(divider)
 }
+
+fun RecyclerView.addLargeDivider(orientation: Int = DividerItemDecoration.VERTICAL) {
+    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.large_divider, null)
+    val divider = DividerItemDecoration(this.context, orientation)
+    drawable?.let { divider.setDrawable(it) }
+    addItemDecoration(divider)
+}

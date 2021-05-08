@@ -2,12 +2,17 @@ package com.headmostlab.findmovie.ui.view.main
 
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ConcatAdapter
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
@@ -17,6 +22,7 @@ import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
+import com.headmostlab.findmovie.ui.view.collection.CollectionFragment
 import com.headmostlab.findmovie.ui.view.detail.DetailFragment
 import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.addDivider
@@ -70,36 +76,65 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         noInternet = false
-        adapter = createAdapter()
 
+        ViewCompat.requestApplyInsets(view)
+
+        setUpRecyclerView()
+
+        observe()
+    }
+
+    private fun setUpRecyclerView() {
+        adapter = createAdapter()
         with(binding.recyclerView) {
             adapter = this@MainFragment.adapter
             addDivider()
         }
-        viewModel.getAppStateLiveData()
-            .observe(viewLifecycleOwner, { adapter.movieCollection = it })
-        scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
-        scrollStateHolder.restoreScrollState(binding.recyclerView, this)
-        viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
-            event.getContentIfNotHandled()?.let { showDetail(it) }
-        })
 
-        ViewCompat.requestApplyInsets(view)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.header) { _, inset ->
+            val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
+            val params = binding.header.layoutParams as FrameLayout.LayoutParams
+            params.updateMargins(top = systemInsets.top)
+            inset
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.recyclerView) { _, inset ->
             val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.recyclerView.updatePadding(
                 left = systemInsets.left,
                 right = systemInsets.right,
-                top = systemInsets.top + resources.getDimensionPixelSize(R.dimen.top_margin),
-                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.bottom_margin)
+                top = systemInsets.top + resources.getDimensionPixelSize(
+                    R.dimen.collection_recycler_view_top_padding
+                ),
+                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding)
             )
             inset
         }
+        scrollStateHolder.setupRecyclerView(binding.recyclerView, this)
+        scrollStateHolder.restoreScrollState(binding.recyclerView, this)
+    }
+
+    private fun observe() {
+        viewModel.getCollections()
+            .observe(viewLifecycleOwner, { adapter.movieCollection = it })
+        viewModel.openMovieEvent.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { showDetail(it) }
+        })
+        viewModel.openCollectionEvent.observe(viewLifecycleOwner, { event ->
+            event.getContentIfNotHandled()?.let { showCollection(it) }
+        })
+    }
+
+    private fun showCollection(collectionId: Int) {
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.container, CollectionFragment.newInstance(collectionId))
+            addToBackStack(null)
+        }.commit()
     }
 
     private fun createAdapter() = CollectionAdapter(
         { viewModel.clickMovieItem(it) },
+        { viewModel.selectCollection(it) },
         scrollStateHolder, viewLifecycleOwner
     ) {
 

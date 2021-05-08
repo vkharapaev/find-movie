@@ -18,14 +18,15 @@ import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbImageHostProvider
 import com.headmostlab.findmovie.data.repository.MockRepository
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
+import com.headmostlab.findmovie.ui.view.utils.viewBinding
 import com.headmostlab.findmovie.ui.viewmodel.detail.DetailAppState
 import com.headmostlab.findmovie.ui.viewmodel.detail.DetailViewModel
 import com.headmostlab.findmovie.ui.viewmodel.detail.DetailViewModelFactory
 
 class DetailFragment : Fragment(R.layout.detail_fragment) {
 
-    private var _binding: DetailFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(DetailFragmentBinding::bind)
+
     private var storedMovieId: Int = 0
 
     private val viewModel: DetailViewModel by lazy {
@@ -36,7 +37,6 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        _binding = DetailFragmentBinding.bind(view)
         storedMovieId = arguments?.getInt(PARAM_MOVIE_ID)
             ?: throw RuntimeException(getString(R.string.detail_fragment_movie_id_is_null))
         viewModel.getAppState(storedMovieId).observe(viewLifecycleOwner, { renderState(it) })
@@ -94,11 +94,6 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
 
     private fun genresToString(genres: List<String>) =
         genres.toString().removePrefix("[").removeSuffix("]")
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
 
     companion object {
         private const val PARAM_MOVIE_ID = "MOVIE_ID"

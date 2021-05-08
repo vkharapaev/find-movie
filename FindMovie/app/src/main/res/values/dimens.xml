@@ -9,5 +9,12 @@
     <dimen name="small_margin">8dp</dimen>
     <dimen name="card_radius">10dp</dimen>
     <dimen name="top_margin">40dp</dimen>
-    <dimen name="bottom_margin">20dp</dimen>
+    <dimen name="recycler_view_bottom_padding">24dp</dimen>
+    <dimen name="wide_shimmer_text_width">160dp</dimen>
+    <dimen name="narrow_shimmer_text_width">120dp</dimen>
+    <dimen name="text_size">16sp</dimen>
+    <dimen name="header_text_size">24sp</dimen>
+    <dimen name="collection_header_height">60dp</dimen>
+    <dimen name="collection_recycler_view_top_padding">90dp</dimen>
+    <dimen name="header_radius">30dp</dimen>
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/seeCollectionButton"
+        android:layout_width="@dimen/narrow_poster_width"
+        android:layout_height="@dimen/narrow_poster_width"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:fontFamily="sans-serif-light"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/see_all"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size"
+        android:theme="@style/Widget.Button.Overlay"
+        app:cornerRadius="@dimen/narrow_poster_width" />
+</FrameLayout>

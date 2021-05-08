@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiMovies
 import com.headmostlab.findmovie.domain.entity.FullMovie
-import com.headmostlab.findmovie.domain.entity.ECollection
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
 
@@ -33,9 +32,6 @@ class TMDbMockDataSource(private val gson: Gson = Gson()) {
             Thread.sleep(DELAY)
             DataConverter.map(gson.fromJson(MOVIE, ApiFullMovie::class.java))
         }
-
-    fun getCategories(): List<ECollection> =
-        listOf(ECollection.NOW_PLAYING, ECollection.UPCOMING, ECollection.POPULAR)
 
     companion object {
         private const val DELAY = 500L;

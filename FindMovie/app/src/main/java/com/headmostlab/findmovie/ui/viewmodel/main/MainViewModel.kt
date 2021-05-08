@@ -1,12 +1,16 @@
 package com.headmostlab.findmovie.ui.viewmodel.main
 
 import androidx.lifecycle.*
+import androidx.paging.insertFooterItem
+import androidx.paging.map
 import androidx.paging.rxjava2.cachedIn
 import com.headmostlab.findmovie.Event
 import com.headmostlab.findmovie.data.repository.PagingRepository
 import com.headmostlab.findmovie.data.repository.Repository
+import com.headmostlab.findmovie.domain.entity.Collection
 import com.headmostlab.findmovie.domain.entity.ECollection
 import com.headmostlab.findmovie.domain.entity.ShortMovie
+import com.headmostlab.findmovie.ui.viewmodel.main.model.UiItem
 import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -15,20 +19,24 @@ import io.reactivex.schedulers.Schedulers
 class MainViewModel(
     private val repository: Repository,
     private val pagingRepository: PagingRepository,
-    private val appStateLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData(),
+    private val uiCollectionsLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData(),
     private val disposables: CompositeDisposable = CompositeDisposable()
 ) : ViewModel() {
 
     private companion object {
-        const val MAX_MOVIE_COUNT_IN_ROW = 20
+        const val MAX_MOVIE_COUNT_IN_ROW = 5
     }
 
     private val _openMovieEvent: MutableLiveData<Event<Int>> = MutableLiveData()
     val openMovieEvent: LiveData<Event<Int>>
         get() = _openMovieEvent
 
-    fun getAppStateLiveData(): LiveData<List<UiMovieCollection>> =
-        appStateLiveData.also { loadMovies() }
+    private val _openCollectionEvent: MutableLiveData<Event<Int>> = MutableLiveData()
+    val openCollectionEvent: LiveData<Event<Int>>
+        get() = _openCollectionEvent
+
+    fun getCollections(): LiveData<List<UiMovieCollection>> =
+        uiCollectionsLiveData.also { loadMovies() }
 
     fun loadMovies(reload: Boolean = false) {
         if (reload || disposables.size() == 0) {
@@ -37,15 +45,16 @@ class MainViewModel(
             repository.getCollections().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { collections ->
-                    appStateLiveData.value = collections.map { collection ->
+                    uiCollectionsLiveData.value = collections.map { collection ->
                         UiMovieCollection(
-                            collection.id,
-                            ECollection.valueOf(collection.collectionRid).title,
+                            collection,
                             pagingRepository.getMovies(
                                 collection.id,
-                                collection.request,
                                 MAX_MOVIE_COUNT_IN_ROW
-                            ).cachedIn(viewModelScope).toLiveData(),
+                            )
+                                .map { pagingData -> pagingData.map { UiItem.Movie(it) as UiItem } }
+                                .map { it.insertFooterItem(item = UiItem.Footer(collection)) }
+                                .cachedIn(viewModelScope).toLiveData(),
                             collection.request == ECollection.UPCOMING.request
                         )
                     }
@@ -55,6 +64,10 @@ class MainViewModel(
 
     fun clickMovieItem(movie: ShortMovie) {
         _openMovieEvent.value = Event(movie.id)
+    }
+
+    fun selectCollection(collection: Collection) {
+        _openCollectionEvent.value = Event(collection.id)
     }
 
     override fun onCleared() {

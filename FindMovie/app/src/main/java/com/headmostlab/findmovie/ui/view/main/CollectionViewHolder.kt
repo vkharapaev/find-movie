@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper
 import com.headmostlab.findmovie.R
+import com.headmostlab.findmovie.domain.entity.Collection
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 import com.rubensousa.recyclerview.ScrollStateHolder
@@ -17,6 +18,7 @@ class CollectionViewHolder(
     private val view: View,
     private val scrollState: ScrollStateHolder,
     private val listener: (ShortMovie) -> Unit,
+    private val showCollectionListener: (Collection) -> Unit,
     private val lifecycleOwner: LifecycleOwner,
     private val pagerErrorHandler: (Throwable) -> Unit
 ) :
@@ -42,20 +44,23 @@ class CollectionViewHolder(
         shimmer = view.findViewById(R.id.shimmerLayout)
     }
 
-    fun bind(item: UiMovieCollection) {
+    fun bind(movieClickListener: (Collection) -> Unit, item: UiMovieCollection) {
         bindViews(view)
 
         data = item
-        stateKey = item.title.toString()
+        stateKey = item.collection.id.toString()
 
         scrollState.setupRecyclerView(recyclerView, this)
 
         layoutManager = recyclerView.layoutManager
 
-        title.text = title.context.getText(item.title)
+        title.text = title.context.getText(item.collection.eCollection.title)
+        title.setOnClickListener {
+            movieClickListener.invoke(item.collection)
+        }
 
         val adapter = MovieAdapter(
-            listener,
+            listener, showCollectionListener,
             item.showSecondLayout
         )
 

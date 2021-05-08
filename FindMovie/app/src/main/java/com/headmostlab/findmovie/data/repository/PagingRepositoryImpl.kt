@@ -9,6 +9,7 @@ import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiService
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Flowable
+import kotlin.math.max
 
 class PagingRepositoryImpl(
     private val service: TMDbApiService,
@@ -22,11 +23,11 @@ class PagingRepositoryImpl(
     @ExperimentalPagingApi
     override fun getMovies(
         collectionId: Int,
-        movieQuery: String,
         count: Int
     ): Flowable<PagingData<ShortMovie>> {
+        val pageCount = max(count / PAGE_SIZE, 1)
         val mediator =
-            MovieRemoteMediator(movieQuery, service, db, TMDbApiKeyProvider(), count / PAGE_SIZE)
+            MovieRemoteMediator(collectionId, service, db, TMDbApiKeyProvider(), pageCount)
         val pager = Pager(PagingConfig(PAGE_SIZE), remoteMediator = mediator) {
             db.movieDao().pagingSource(collectionId, count)
         }
