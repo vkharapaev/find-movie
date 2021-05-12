@@ -10,8 +10,9 @@ data class FullMovie(
     val votesAverage: Double,
     val votesCount: Int,
     val budget: Int,
-    val revenue: Int,
+    val revenue: Long,
     val date: String,
     val description: String,
-    val poster: String
+    val poster: String,
+    var people: List<Person>? = null
 )

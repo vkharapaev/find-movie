@@ -12,7 +12,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
@@ -66,7 +66,7 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
         super.onCreate(savedInstanceState)
         scrollStateHolder = ScrollStateHolder(savedInstanceState)
 
-        setFragmentResultListener("RETRY_TO_CONNECT") { requestKey, bundle ->
+        setFragmentResultListener(NoInternetFragment.RETRY_TO_CONNECT) { requestKey, bundle ->
             viewModel.loadMovies(true)
         }
     }
@@ -103,7 +103,7 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
                 top = systemInsets.top + resources.getDimensionPixelSize(
                     R.dimen.collection_recycler_view_top_padding
                 ),
-                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding)
+                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.bottom_padding)
             )
             inset
         }

@@ -1,7 +1,6 @@
 package com.headmostlab.findmovie.data.datasource.network.tmdb
 
 import com.google.gson.GsonBuilder
-import com.headmostlab.findmovie.data.datasource.network.HostProvider
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

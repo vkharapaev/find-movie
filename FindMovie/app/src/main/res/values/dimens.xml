@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="large_margin">16dp</dimen>
+    <dimen name="largest_margin">24dp</dimen>
     <dimen name="narrow_poster_width">154dp</dimen>
     <dimen name="narrow_poster_height">231dp</dimen>
     <dimen name="wide_poster_width">250dp</dimen>
@@ -8,13 +9,19 @@
     <dimen name="smallest_margin">4dp</dimen>
     <dimen name="small_margin">8dp</dimen>
     <dimen name="card_radius">10dp</dimen>
-    <dimen name="top_margin">40dp</dimen>
-    <dimen name="recycler_view_bottom_padding">24dp</dimen>
+    <dimen name="large_card_radius">24dp</dimen>
+    <dimen name="bottom_padding">24dp</dimen>
     <dimen name="wide_shimmer_text_width">160dp</dimen>
     <dimen name="narrow_shimmer_text_width">120dp</dimen>
+    <dimen name="large_text_size">24sp</dimen>
     <dimen name="text_size">16sp</dimen>
+    <dimen name="small_test_size">12sp</dimen>
     <dimen name="header_text_size">24sp</dimen>
     <dimen name="collection_header_height">60dp</dimen>
     <dimen name="collection_recycler_view_top_padding">90dp</dimen>
     <dimen name="header_radius">30dp</dimen>
+    <dimen name="player_final_height">250dp</dimen>
+    <dimen name="player_start_height">500dp</dimen>
+    <dimen name="actor_avatar_height">100dp</dimen>
+    <dimen name="actor_avatar_width">100dp</dimen>
 </resources>

@@ -11,6 +11,7 @@ import com.headmostlab.findmovie.ui.view.utils.viewBinding
 
 class NoInternetFragment : Fragment(R.layout.no_internet_fragment) {
     companion object {
+        const val RETRY_TO_CONNECT = "RETRY_TO_CONNECT"
         fun newInstance() = NoInternetFragment()
     }
 
