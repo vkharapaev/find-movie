@@ -1,2 +1,2 @@
-@layout/movie_row_item
-@layout/movie_row_item2
+@layout/narrow_movie_row_item
+@layout/wide_movie_row_item

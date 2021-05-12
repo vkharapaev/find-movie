@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PlayerBehavior">
+        <attr name="startHeight" format="dimension"/>
+        <attr name="finalHeight" format="dimension"/>
+    </declare-styleable>
+</resources>

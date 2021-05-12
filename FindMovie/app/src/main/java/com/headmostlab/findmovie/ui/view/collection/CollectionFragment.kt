@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LoadState
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.data.datasource.network.TMDbDataSource
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
@@ -37,8 +37,6 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
 
     private lateinit var adapter: CollectionAdapter
 
-    private var noInternet = false
-
     private val viewModel: CollectionViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
         val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
@@ -53,25 +51,20 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setFragmentResultListener("RETRY_TO_CONNECT") { requestKey, bundle -> }
+        setFragmentResultListener(NoInternetFragment.RETRY_TO_CONNECT) { requestKey, bundle -> }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        noInternet = false
-
         adapter = CollectionAdapter { viewModel.clickMovieItem(it) }
 
         adapter.addLoadStateListener {
             if (it.append is LoadState.Error) {
                 when ((it.append as LoadState.Error).error) {
                     is IOException -> {
-                        if (!noInternet) {
-                            noInternet = true
-                            parentFragmentManager.beginTransaction().apply {
-                                replace(R.id.container, NoInternetFragment.newInstance())
-                                addToBackStack(null)
-                            }.commit()
-                        }
+                        parentFragmentManager.beginTransaction().apply {
+                            replace(R.id.container, NoInternetFragment.newInstance())
+                            addToBackStack(null)
+                        }.commit()
                     }
                 }
             }
@@ -107,7 +100,7 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
                 top = systemInsets.top + resources.getDimensionPixelSize(
                     R.dimen.collection_recycler_view_top_padding
                 ),
-                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.recycler_view_bottom_padding)
+                bottom = systemInsets.bottom + resources.getDimensionPixelSize(R.dimen.bottom_padding)
             )
             inset
         }

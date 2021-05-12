@@ -19,7 +19,7 @@ data class ApiFullMovie(
     @SerializedName("production_companies") val productionCompanies: List<ApiProductionCompany>,
     @SerializedName("production_countries") val productionCountries: List<ApiProductionCountry>,
     @SerializedName("release_date") val releaseDate: String,
-    @SerializedName("revenue") val revenue: Int,
+    @SerializedName("revenue") val revenue: Long,
     @SerializedName("runtime") val runtime: Int?,
     @SerializedName("spoken_languages") val spokenLanguages: List<ApiSpokenLanguage>,
     @SerializedName("status") val status: String,

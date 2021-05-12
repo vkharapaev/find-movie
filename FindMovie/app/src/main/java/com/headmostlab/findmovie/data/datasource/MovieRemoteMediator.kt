@@ -16,7 +16,7 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import retrofit2.HttpException
 import com.headmostlab.findmovie.data.datasource.local.DataConverter as LocalDataConverter
-import com.headmostlab.findmovie.data.datasource.network.DataConverter as NetworkDataConverter
+import com.headmostlab.findmovie.data.datasource.network.tmdb.DataConverter as NetworkDataConverter
 
 @ExperimentalPagingApi
 class MovieRemoteMediator(
