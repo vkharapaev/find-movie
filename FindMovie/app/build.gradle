@@ -6,6 +6,16 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file("signing.properties").newDataInputStream())
+            storeFile file(properties.getProperty("store_file"))
+            storePassword properties.getProperty("store_pass")
+            keyAlias properties.getProperty("key_alias")
+            keyPassword properties.getProperty("pass")
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -24,6 +34,7 @@ android {
                                       "$projectDir/schemas".toString()]
             }
         }
+        signingConfig signingConfigs.release
     }
 
     buildFeatures {
