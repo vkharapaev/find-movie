@@ -1,3 +1,6 @@
 # App screens
 
-![](https://github.com/vkharapaev/find-movie/art/screen1.jpg) | ![](https://github.com/vkharapaev/find-movie/art/screen2.jpg) | ![](https://github.com/vkharapaev/find-movie/art/screen3.jpg)
+![](https://github.com/vkharapaev/find-movie/blob/master/art/screen1.jpg?raw=true) | ![](https://github.com/vkharapaev/find-movie/blob/master/art/screen2.jpg?raw=true) | ![](https://github.com/vkharapaev/find-movie/blob/master/art/screen3.jpg?raw=true)
+
+
+https://github.com/vkharapaev/find-movie/blob/master/art/screen1.jpg?raw=true
