@@ -37,7 +37,7 @@
             android:id="@+id/shimmerLayout"
             layout="@layout/narrow_collection_shimmer_item"
             android:visibility="invisible"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
     </FrameLayout>
 </LinearLayout>

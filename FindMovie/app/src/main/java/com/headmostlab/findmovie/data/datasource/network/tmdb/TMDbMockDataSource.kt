@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.data.datasource.network
+package com.headmostlab.findmovie.data.datasource.network.tmdb
 
 import com.google.gson.Gson
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie

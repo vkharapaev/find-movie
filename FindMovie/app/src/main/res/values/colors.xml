@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_200">#FFe43552</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="purple_900">#ff271f52</color>
     <color name="purple_900_opaque">#aa271f52</color>
+    <color name="purple_dark_opaque">#aa19153a</color>
     <color name="purple_dark">#ff19153a</color>
 
     <color name="status_bar_scrim">@color/purple_900_opaque</color>
