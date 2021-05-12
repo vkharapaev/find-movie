@@ -104,6 +104,14 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
             )
             inset
         }
+
+        binding.swipeRefresh.setOnRefreshListener {
+            adapter.refresh()
+        }
+
+        adapter.addLoadStateListener {
+            binding.swipeRefresh.isRefreshing = it.refresh is LoadState.Loading
+        }
     }
 
     private fun showDetail(movieId: Int) {
