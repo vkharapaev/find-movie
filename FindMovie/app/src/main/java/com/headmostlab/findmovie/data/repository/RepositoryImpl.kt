@@ -8,8 +8,9 @@ import com.headmostlab.findmovie.domain.entity.Collection
 import com.headmostlab.findmovie.domain.entity.FullMovie
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
+import javax.inject.Inject
 
-class RepositoryImpl(private val dataSource: TMDbDataSource, private val db: RoomDb) : Repository {
+class RepositoryImpl @Inject constructor(private val dataSource: TMDbDataSource, private val db: RoomDb) : Repository {
     override fun getNowPlayingMovies(): Single<List<ShortMovie>> = dataSource.getNowPlayingMovies()
     override fun getUpcomingMovies(): Single<List<ShortMovie>> = dataSource.getUpcomingMovies()
     override fun getPopularMovies(): Single<List<ShortMovie>> = dataSource.getPopularMovies()

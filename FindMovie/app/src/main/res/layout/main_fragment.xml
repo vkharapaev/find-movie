@@ -17,26 +17,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/narrow_collection_row_item" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/collection_header_height"
-        app:cardBackgroundColor="@color/purple_900_opaque"
-        app:cardElevation="0dp"
-        app:shapeAppearanceOverlay="@style/Header.ShapeAppearance.Overlay">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="@dimen/large_margin"
-            android:layout_marginEnd="@dimen/large_margin"
-            android:gravity="center"
-            android:text="@string/app_name"
-            android:textSize="@dimen/header_text_size"
-            app:layout_anchor="@+id/materialCardView"
-            app:layout_anchorGravity="center" />
-
-    </com.google.android.material.card.MaterialCardView>
+    <include android:id="@+id/headerLayout" layout="@layout/header" />
 
 </FrameLayout>

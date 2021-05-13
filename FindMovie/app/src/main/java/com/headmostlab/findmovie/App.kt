@@ -1,25 +1,24 @@
 package com.headmostlab.findmovie
 
 import android.app.Application
-import androidx.room.Room
-import com.headmostlab.findmovie.data.datasource.local.RoomDb
 import com.headmostlab.findmovie.data.datasource.local.entities.Collection
+import com.headmostlab.findmovie.di.DaggerAppComponent
 import com.headmostlab.findmovie.domain.entity.ECollection
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class App : Application() {
-
-    val database: RoomDb by lazy {
-        Room.databaseBuilder(this, RoomDb::class.java, DB_NAME).fallbackToDestructiveMigration()
-            .build()
-    }
-
     override fun onCreate() {
         super.onCreate()
         instance = this
 
+        initDI()
+
         createCollectionTypes()
+    }
+
+    private fun initDI() {
+        DI.appComponent = DaggerAppComponent.builder().appContext(this).build()
     }
 
     private fun createCollectionTypes() {
@@ -27,12 +26,11 @@ class App : Application() {
             val collections = ECollection.values()
                 .map { Collection(it.ordinal + 1, it.name, it.request) }
 
-            database.collectionDao().insertAll(collections)
+            DI.appComponent.db().collectionDao().insertAll(collections)
         }.subscribeOn(Schedulers.io()).subscribe()
     }
 
     companion object {
-        private const val DB_NAME = "moviedb"
         lateinit var instance: App
             private set
     }

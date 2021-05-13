@@ -15,17 +15,19 @@ import com.headmostlab.findmovie.ui.viewmodel.main.model.UiMovieCollection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MainViewModel(
+class MainViewModel @Inject constructor(
     private val repository: Repository,
-    private val pagingRepository: PagingRepository,
-    private val uiCollectionsLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData(),
-    private val disposables: CompositeDisposable = CompositeDisposable()
+    private val pagingRepository: PagingRepository
 ) : ViewModel() {
 
     private companion object {
         const val MAX_MOVIE_COUNT_IN_ROW = 15
     }
+
+    private val uiCollectionsLiveData: MutableLiveData<List<UiMovieCollection>> = MutableLiveData()
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     private val _openMovieEvent: MutableLiveData<Event<Int>> = MutableLiveData()
     val openMovieEvent: LiveData<Event<Int>>

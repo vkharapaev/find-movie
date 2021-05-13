@@ -3,8 +3,9 @@ package com.headmostlab.findmovie.data.datasource.network.youtube
 import android.content.Context
 import androidx.core.util.isEmpty
 import io.reactivex.Single
+import javax.inject.Inject
 
-class YouTubeDataSourceImpl(val context: Context) : YouTubeDataSource {
+class YouTubeDataSourceImpl @Inject constructor(val context: Context) : YouTubeDataSource {
     override fun getVideoUrl(videoId: String): Single<String> {
         return Single.create { emitter ->
             UTExtractor(context) { ytFiles, _ ->

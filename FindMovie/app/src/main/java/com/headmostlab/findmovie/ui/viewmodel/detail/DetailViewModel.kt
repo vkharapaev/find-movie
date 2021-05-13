@@ -9,14 +9,16 @@ import com.headmostlab.findmovie.data.repository.VideoRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class DetailViewModel(
+class DetailViewModel @Inject constructor(
     private val repository: Repository,
-    private val videoRepository: VideoRepository,
-    private val state: MutableLiveData<State> = MutableLiveData(),
-    private val disposables: CompositeDisposable = CompositeDisposable(),
-    private var movie: FullMovie? = null
+    private val videoRepository: VideoRepository
 ) : ViewModel() {
+
+    private val state: MutableLiveData<State> = MutableLiveData()
+    private val disposables: CompositeDisposable = CompositeDisposable()
+    private var movie: FullMovie? = null
 
     private val _videoUrlMutableLiveData = MutableLiveData<String>()
     val videoUrlLiveData: LiveData<String> = _videoUrlMutableLiveData
