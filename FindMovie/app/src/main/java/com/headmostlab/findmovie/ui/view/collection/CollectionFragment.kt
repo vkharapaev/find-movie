@@ -3,22 +3,22 @@ package com.headmostlab.findmovie.ui.view.collection
 import android.os.Bundle
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.os.bundleOf
 import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.CollectionFragmentBinding
-import com.headmostlab.findmovie.ui.view.detail.DetailFragment
 import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.addLargeDivider
 import com.headmostlab.findmovie.ui.view.utils.viewBinding
@@ -30,10 +30,7 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
 
     private val binding by viewBinding(CollectionFragmentBinding::bind)
 
-    private val collectionId: Int by lazy {
-        arguments?.getInt(PARAM_COLLECTION_ID)
-            ?: throw IllegalArgumentException("Collection id must be provided")
-    }
+    private val args: CollectionFragmentArgs by navArgs()
 
     private lateinit var adapter: CollectionAdapter
 
@@ -45,7 +42,7 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
         val pagingRepository = PagingRepositoryImpl(service, db)
         ViewModelProvider(
             this,
-            CollectionViewModelFactory(collectionId, repository, pagingRepository)
+            CollectionViewModelFactory(args.collectionId, repository, pagingRepository)
         ).get(CollectionViewModel::class.java)
     }
 
@@ -61,10 +58,7 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
             if (it.append is LoadState.Error) {
                 when ((it.append as LoadState.Error).error) {
                     is IOException -> {
-                        parentFragmentManager.beginTransaction().apply {
-                            replace(R.id.container, NoInternetFragment.newInstance())
-                            addToBackStack(null)
-                        }.commit()
+                        findNavController().navigate(CollectionFragmentDirections.actionGlobalNoInternetFragment())
                     }
                 }
             }
@@ -104,28 +98,9 @@ class CollectionFragment : Fragment(R.layout.collection_fragment) {
             )
             inset
         }
-
-        binding.swipeRefresh.setOnRefreshListener {
-            adapter.refresh()
-        }
-
-        adapter.addLoadStateListener {
-            binding.swipeRefresh.isRefreshing = it.refresh is LoadState.Loading
-        }
     }
 
     private fun showDetail(movieId: Int) {
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, DetailFragment.newInstance(movieId))
-            addToBackStack("")
-            commit()
-        }
-    }
-
-    companion object {
-        private const val PARAM_COLLECTION_ID = "COLLECTION_ID"
-        fun newInstance(collectionId: Int) = CollectionFragment().apply {
-            arguments = bundleOf(PARAM_COLLECTION_ID to collectionId)
-        }
+        findNavController().navigate(CollectionFragmentDirections.actionGlobalDetailFragment(movieId))
     }
 }

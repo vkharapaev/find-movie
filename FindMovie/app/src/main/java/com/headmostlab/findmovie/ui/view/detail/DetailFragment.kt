@@ -11,6 +11,8 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.AppBarLayout
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
@@ -23,6 +25,7 @@ import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.data.repository.VideoRepositoryImpl
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
 import com.headmostlab.findmovie.domain.entity.FullMovie
+import com.headmostlab.findmovie.ui.view.main.MainFragmentDirections
 import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.VideoPlayer
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
@@ -36,7 +39,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
 
     private val binding by viewBinding(DetailFragmentBinding::bind)
 
-    private var storedMovieId: Int = 0
+    private val arg: DetailFragmentArgs by navArgs()
 
     private val viewModel: DetailViewModel by lazy {
         val service = TMDbApi(TMDbHostProvider()).getService()
@@ -58,11 +61,9 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        storedMovieId = arguments?.getInt(PARAM_MOVIE_ID)
-            ?: throw RuntimeException(getString(R.string.detail_fragment_movie_id_is_null))
-        viewModel.getAppState(storedMovieId).observe(viewLifecycleOwner, { renderState(it) })
+        viewModel.getAppState(arg.movieId).observe(viewLifecycleOwner, { renderState(it) })
 
-        viewModel.getVideoUrl(storedMovieId)
+        viewModel.getVideoUrl(arg.movieId)
         viewModel.videoUrlLiveData.observe(viewLifecycleOwner) { url ->
             playVideo(url)
         }
@@ -114,10 +115,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
             is State.Error -> {
                 when (state.error) {
                     is IOException -> {
-                        parentFragmentManager.beginTransaction().apply {
-                            replace(R.id.container, NoInternetFragment.newInstance())
-                            addToBackStack(null)
-                        }.commit()
+                        findNavController().navigate(MainFragmentDirections.actionGlobalNoInternetFragment())
                     }
                     else -> binding.apply {
                         loadingProgress.shimmer.visibility = View.INVISIBLE
@@ -125,7 +123,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
                             state.error.message ?: getString(R.string.error_message),
                             getString(R.string.button_reload)
                         ) {
-                            viewModel.getAppState(storedMovieId)
+                            viewModel.getAppState(arg.movieId)
                         }
                     }
                 }
@@ -167,11 +165,4 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         actorAdapter.submitList(movie.people)
     }
 
-    companion object {
-        private const val PARAM_MOVIE_ID = "MOVIE_ID"
-
-        fun newInstance(movieId: Int) = DetailFragment().apply {
-            arguments = Bundle().apply { putInt(PARAM_MOVIE_ID, movieId) }
-        }
-    }
 }

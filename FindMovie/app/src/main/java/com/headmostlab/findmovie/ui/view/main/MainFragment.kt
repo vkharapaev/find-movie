@@ -10,17 +10,16 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
+import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
 import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
 import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
-import com.headmostlab.findmovie.ui.view.collection.CollectionFragment
-import com.headmostlab.findmovie.ui.view.detail.DetailFragment
 import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.addDivider
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
@@ -34,7 +33,6 @@ import java.util.*
 class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollStateKeyProvider {
 
     companion object {
-        fun newInstance() = MainFragment()
         private const val MAIN_RECYCLER_VIEW = "MAIN_RECYCLER_VIEW"
     }
 
@@ -123,10 +121,11 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
     }
 
     private fun showCollection(collectionId: Int) {
-        parentFragmentManager.beginTransaction().apply {
-            replace(R.id.container, CollectionFragment.newInstance(collectionId))
-            addToBackStack(null)
-        }.commit()
+        findNavController().navigate(
+            MainFragmentDirections.actionMainFragmentToCollectionFragment(
+                collectionId
+            )
+        )
     }
 
     private fun createAdapter() = CollectionAdapter(
@@ -139,10 +138,7 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
             is IOException -> {
                 if (!noInternet) {
                     noInternet = true
-                    parentFragmentManager.beginTransaction().apply {
-                        replace(R.id.container, NoInternetFragment.newInstance())
-                        addToBackStack(null)
-                    }.commit()
+                    findNavController().navigate(R.id.action_global_noInternetFragment)
                 }
             }
             else ->
@@ -156,12 +152,7 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
     }
 
     private fun showDetail(movieId: Int) {
-        requireActivity().supportFragmentManager.apply {
-            beginTransaction()
-                .replace(R.id.container, DetailFragment.newInstance(movieId))
-                .addToBackStack("")
-                .commit()
-        }
+        findNavController().navigate(MainFragmentDirections.actionGlobalDetailFragment(movieId))
     }
 
     override fun getScrollStateKey() = MAIN_RECYCLER_VIEW
