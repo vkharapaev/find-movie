@@ -11,7 +11,8 @@ import io.reactivex.schedulers.Schedulers
 class App : Application() {
 
     val database: RoomDb by lazy {
-        Room.databaseBuilder(this, RoomDb::class.java, DB_NAME).build()
+        Room.databaseBuilder(this, RoomDb::class.java, DB_NAME).fallbackToDestructiveMigration()
+            .build()
     }
 
     override fun onCreate() {
