@@ -10,8 +10,9 @@ import com.headmostlab.findmovie.data.repository.Repository
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class CollectionViewModel(
+class CollectionViewModel @Inject constructor(
     private val collectionId: Int,
     private val repository: Repository,
     private val pagingRepository: PagingRepository,

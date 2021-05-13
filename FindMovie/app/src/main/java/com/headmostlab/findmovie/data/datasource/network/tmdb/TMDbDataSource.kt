@@ -4,8 +4,9 @@ import com.headmostlab.findmovie.domain.entity.Person
 import com.headmostlab.findmovie.domain.entity.FullMovie
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
+import javax.inject.Inject
 
-class TMDbDataSource(
+class TMDbDataSource @Inject constructor(
     private val service: TMDbApiService,
     private val apiKeyProvider: ApiKeyProvider
 ) {

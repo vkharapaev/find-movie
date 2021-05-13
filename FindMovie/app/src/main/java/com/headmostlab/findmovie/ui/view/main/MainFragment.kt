@@ -9,23 +9,16 @@ import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.headmostlab.findmovie.App
+import com.headmostlab.findmovie.DI
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
-import com.headmostlab.findmovie.data.repository.PagingRepositoryImpl
-import com.headmostlab.findmovie.data.repository.RepositoryImpl
 import com.headmostlab.findmovie.databinding.MainFragmentBinding
 import com.headmostlab.findmovie.ui.view.nointernet.NoInternetFragment
 import com.headmostlab.findmovie.ui.view.utils.addDivider
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
 import com.headmostlab.findmovie.ui.view.utils.viewBinding
 import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModel
-import com.headmostlab.findmovie.ui.viewmodel.main.MainViewModelFactory
 import com.rubensousa.recyclerview.ScrollStateHolder
 import java.io.IOException
 import java.util.*
@@ -36,29 +29,27 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
         private const val MAIN_RECYCLER_VIEW = "MAIN_RECYCLER_VIEW"
     }
 
+    private val component by lazy {
+        DaggerMainScreenComponent.builder()
+            .repository(DI.appComponent.repository())
+            .pagingRepository(DI.appComponent.pagingRepository())
+            .build()
+    }
+
+    private val viewModel by viewModels<MainViewModel> { component.viewModelFactory() }
+
     private val binding by viewBinding(MainFragmentBinding::bind)
+
+    private var noInternet = false
 
     private lateinit var scrollStateHolder: ScrollStateHolder
 
     private lateinit var adapter: CollectionAdapter
 
-    private val viewModel: MainViewModel by lazy {
-        val service = TMDbApi(TMDbHostProvider()).getService()
-        val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
-        val db = App.instance.database
-        val repository = RepositoryImpl(dataSource, db)
-        val pagingRepository = PagingRepositoryImpl(service, db)
-        ViewModelProvider(this, MainViewModelFactory(repository, pagingRepository)).get(
-            MainViewModel::class.java
-        )
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         scrollStateHolder.onSaveInstanceState(outState)
     }
-
-    private var noInternet = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,9 +77,11 @@ class MainFragment : Fragment(R.layout.main_fragment), ScrollStateHolder.ScrollS
             addDivider()
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.header) { _, inset ->
+        binding.headerLayout.title.text = getString(R.string.app_name)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.headerLayout.header) { _, inset ->
             val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
-            val params = binding.header.layoutParams as FrameLayout.LayoutParams
+            val params = binding.headerLayout.header.layoutParams as FrameLayout.LayoutParams
             params.updateMargins(top = systemInsets.top)
             inset
         }

@@ -9,7 +9,6 @@ import com.headmostlab.findmovie.App
 import com.headmostlab.findmovie.GlideApp
 import com.headmostlab.findmovie.R
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbImageHostProvider
-import com.headmostlab.findmovie.databinding.NarrowMovieRowItemBinding
 import com.headmostlab.findmovie.databinding.NarrowMovieRowItemInGridBinding
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 

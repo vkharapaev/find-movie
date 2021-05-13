@@ -10,19 +10,13 @@ import androidx.core.view.updateMargins
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.appbar.AppBarLayout
 import com.headmostlab.findmovie.App
+import com.headmostlab.findmovie.DI
 import com.headmostlab.findmovie.R
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApi
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbDataSource
-import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbHostProvider
-import com.headmostlab.findmovie.data.datasource.network.youtube.YouTubeDataSourceImpl
-import com.headmostlab.findmovie.data.repository.RepositoryImpl
-import com.headmostlab.findmovie.data.repository.VideoRepositoryImpl
 import com.headmostlab.findmovie.databinding.DetailFragmentBinding
 import com.headmostlab.findmovie.domain.entity.FullMovie
 import com.headmostlab.findmovie.ui.view.main.MainFragmentDirections
@@ -31,25 +25,23 @@ import com.headmostlab.findmovie.ui.view.utils.VideoPlayer
 import com.headmostlab.findmovie.ui.view.utils.showSnackbar
 import com.headmostlab.findmovie.ui.view.utils.viewBinding
 import com.headmostlab.findmovie.ui.viewmodel.detail.DetailViewModel
-import com.headmostlab.findmovie.ui.viewmodel.detail.DetailViewModelFactory
 import com.headmostlab.findmovie.ui.viewmodel.detail.State
 import java.io.IOException
 
 class DetailFragment : Fragment(R.layout.detail_fragment) {
 
-    private val binding by viewBinding(DetailFragmentBinding::bind)
-
     private val arg: DetailFragmentArgs by navArgs()
 
-    private val viewModel: DetailViewModel by lazy {
-        val service = TMDbApi(TMDbHostProvider()).getService()
-        val dataSource = TMDbDataSource(service, TMDbApiKeyProvider())
-        val repository = /*MockRepository()*/ RepositoryImpl(dataSource, App.instance.database)
-        val videoRepository = VideoRepositoryImpl(YouTubeDataSourceImpl(App.instance))
-        ViewModelProvider(this, DetailViewModelFactory(repository, videoRepository)).get(
-            DetailViewModel::class.java
-        )
+    private val component by lazy {
+        DaggerDetailScreenComponent.builder()
+            .appContext(App.instance)
+            .repository(DI.appComponent.repository())
+            .build()
     }
+
+    private val viewModel by viewModels<DetailViewModel> { component.viewModelFactory() }
+
+    private val binding by viewBinding(DetailFragmentBinding::bind)
 
     private val videoPlayer by lazy { VideoPlayer(requireContext()) }
 
@@ -76,7 +68,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { _, inset ->
             val systemInsets = inset.getInsets(WindowInsetsCompat.Type.systemBars())
 
-            (binding.header.layoutParams as FrameLayout.LayoutParams)
+            (binding.headerLayout.header.layoutParams as FrameLayout.LayoutParams)
                 .updateMargins(top = systemInsets.top)
 
             binding.main.updatePadding(bottom = systemInsets.bottom)
@@ -152,7 +144,7 @@ class DetailFragment : Fragment(R.layout.detail_fragment) {
     private fun setData(movie: FullMovie) {
         val context = binding.root.context
         with(binding) {
-            title.text = movie.title
+            headerLayout.title.text = movie.title
             genres.text = movie.genres.joinToString()
             duration.text = context.getString(R.string.detail_duration, movie.duration.toString())
             rating.text = context.getString(

@@ -9,9 +9,10 @@ import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiKeyProvider
 import com.headmostlab.findmovie.data.datasource.network.tmdb.TMDbApiService
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Flowable
+import javax.inject.Inject
 import kotlin.math.max
 
-class PagingRepositoryImpl(
+class PagingRepositoryImpl @Inject constructor(
     private val service: TMDbApiService,
     private val db: RoomDb
 ) : PagingRepository {
