@@ -22,6 +22,7 @@ import androidx.room.*
 data class CollectionMovieCrossRef(
     @ColumnInfo(index = true)
     val collectionId: Int,
+    val page: Int,
     @ColumnInfo(index = true)
     val movieId: Int
 )
