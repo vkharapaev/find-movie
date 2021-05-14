@@ -1,14 +1,3 @@
-# Apk (version 3)
-[![](https://github.com/vkharapaev/find-movie/blob/master/art/small_icon.png?raw=true)](https://github.com/vkharapaev/find-movie/blob/master/versions/find-movie-3.apk?raw=true)
-
-# App screens
-![](https://github.com/vkharapaev/find-movie/blob/master/art/screen1.jpg?raw=true)
-![](https://github.com/vkharapaev/find-movie/blob/master/art/screen2.jpg?raw=true)
-![](https://github.com/vkharapaev/find-movie/blob/master/art/screen3.jpg?raw=true)
-
-# Video
-[![](https://img.youtube.com/vi/qgaM4dIOGTE/0.jpg)](https://youtu.be/qgaM4dIOGTE)
-
 # Description
 The app is intended for finding movies. It is based on the REST API of https://themoviedb.org service.
 App consists of 3 screens: Main, Collection, Detail.
@@ -28,3 +17,13 @@ The app uses several libraries including Dagger, Navigation, Exoplayer, RxJava, 
 - All screen transition performed by means of Navigation component. All transition are animated.
 - Some dependencies are provided by Dagger. It has two scopes App scope and Screen scope to efficiently manage memory of the app.
 
+# Apk (version 3)
+[![](https://github.com/vkharapaev/find-movie/blob/master/art/small_icon.png?raw=true)](https://github.com/vkharapaev/find-movie/blob/master/versions/find-movie-3.apk?raw=true)
+
+# App screens
+![](https://github.com/vkharapaev/find-movie/blob/master/art/screen1.jpg?raw=true)
+![](https://github.com/vkharapaev/find-movie/blob/master/art/screen2.jpg?raw=true)
+![](https://github.com/vkharapaev/find-movie/blob/master/art/screen3.jpg?raw=true)
+
+# Video
+[![](https://img.youtube.com/vi/qgaM4dIOGTE/0.jpg)](https://youtu.be/qgaM4dIOGTE)
