@@ -2,7 +2,7 @@ package com.headmostlab.findmovie.data.datasource.network.tmdb
 
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.credit.ApiCredits
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie
-import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiMovies
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiMovies
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.video.ApiVideos
 import io.reactivex.Single
 import retrofit2.http.GET

@@ -3,8 +3,8 @@ package com.headmostlab.findmovie.data.datasource.network.tmdb
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.credit.ApiCredits
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiGenre
-import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiMovies
-import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiShortMovie
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiMovies
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiShortMovie
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.video.ApiVideos
 import com.headmostlab.findmovie.domain.entity.Person
 import com.headmostlab.findmovie.domain.entity.FullMovie

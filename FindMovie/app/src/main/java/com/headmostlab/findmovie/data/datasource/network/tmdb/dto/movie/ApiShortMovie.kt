@@ -1,4 +1,4 @@
-package com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular
+package com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie
 
 import com.google.gson.annotations.SerializedName
 

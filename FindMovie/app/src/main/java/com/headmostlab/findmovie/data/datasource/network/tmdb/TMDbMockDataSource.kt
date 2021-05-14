@@ -2,7 +2,7 @@ package com.headmostlab.findmovie.data.datasource.network.tmdb
 
 import com.google.gson.Gson
 import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiFullMovie
-import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.popular.ApiMovies
+import com.headmostlab.findmovie.data.datasource.network.tmdb.dto.movie.ApiMovies
 import com.headmostlab.findmovie.domain.entity.FullMovie
 import com.headmostlab.findmovie.domain.entity.ShortMovie
 import io.reactivex.Single
