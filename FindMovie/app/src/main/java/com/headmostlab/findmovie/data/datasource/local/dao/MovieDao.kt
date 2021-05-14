@@ -19,6 +19,6 @@ interface MovieDao {
     @Query("SELECT * FROM Movie")
     fun getAllMovies(): Single<List<Movie>>
 
-    @Query("SELECT m.* from CollectionMovieCrossRef ref INNER JOIN Movie m on ref.movieId = m.id WHERE ref.collectionId = :collectionId ORDER BY m.popularity DESC limit :maxCount")
+    @Query("SELECT m.* from CollectionMovieCrossRef ref INNER JOIN Movie m on ref.movieId = m.id WHERE ref.collectionId = :collectionId ORDER BY ref.page ASC, m.popularity DESC limit :maxCount")
     fun pagingSource(collectionId: Int, maxCount: Int = 1_000_000): PagingSource<Int, Movie>
 }

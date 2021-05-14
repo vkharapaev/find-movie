@@ -68,7 +68,6 @@ class MovieRemoteMediator(
                 if (maxPageCount != null && curKey > maxPageCount) {
                     return@flatMap Single.just(MediatorResult.Success(true))
                 }
-
                 service.getMovies(query, keyProvider.getApiKey(), curKey)
                     .map { NetworkDataConverter.map(it) }
                     .map { movies ->
@@ -76,7 +75,7 @@ class MovieRemoteMediator(
                         val collection = collectionDao.getByRequest(query)
 
                         val collectionMovieCrossRefs =
-                            movies.map { CollectionMovieCrossRef(collection.id, it.id) }
+                            movies.map { CollectionMovieCrossRef(collection.id, curKey, it.id) }
 
                         db.runInTransaction {
                             if (loadType == REFRESH) {

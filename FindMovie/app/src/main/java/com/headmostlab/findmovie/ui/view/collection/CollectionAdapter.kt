@@ -29,7 +29,7 @@ class CollectionAdapter(
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ShortMovie>() {
             override fun areItemsTheSame(oldItem: ShortMovie, newItem: ShortMovie): Boolean {
-                return oldItem.id == oldItem.id
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(oldItem: ShortMovie, newItem: ShortMovie) =

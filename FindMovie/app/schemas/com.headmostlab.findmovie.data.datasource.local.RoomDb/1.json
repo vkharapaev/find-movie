@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "4e86a80d293675195a68350ed0e9a2a0",
+    "identityHash": "868d3db079f609a3d240f463caf3dfc3",
     "entities": [
       {
         "tableName": "Collection",
@@ -103,11 +103,17 @@
       },
       {
         "tableName": "CollectionMovieCrossRef",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`collectionId` INTEGER NOT NULL, `movieId` INTEGER NOT NULL, PRIMARY KEY(`collectionId`, `movieId`), FOREIGN KEY(`collectionId`) REFERENCES `Collection`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`collectionId` INTEGER NOT NULL, `page` INTEGER NOT NULL, `movieId` INTEGER NOT NULL, PRIMARY KEY(`collectionId`, `movieId`), FOREIGN KEY(`collectionId`) REFERENCES `Collection`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`movieId`) REFERENCES `Movie`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "collectionId",
             "columnName": "collectionId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "page",
+            "columnName": "page",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -198,7 +204,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4e86a80d293675195a68350ed0e9a2a0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '868d3db079f609a3d240f463caf3dfc3')"
     ]
   }
 }
