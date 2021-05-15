@@ -14,8 +14,8 @@ The app uses several libraries including Dagger, Navigation, Exoplayer, RxJava, 
 - Glide for image loading
 - Room for requests caching
 - Firebase messaging is used for delivering push notifications.
-- All screen transition are performed by means of Navigation component. All transition are animated.
-- Some dependencies are provided by Dagger. It has two scopes App scope and Screen scope to efficiently manage memory of the app.
+- All transitions between screens are performed by means of Navigation component. All transitions are animated.
+- Some dependencies are provided by Dagger. It has app scope and screen scope to efficiently manage memory.
 
 # Apk (version 3)
 [![](https://github.com/vkharapaev/find-movie/blob/master/art/small_icon.png?raw=true)](https://github.com/vkharapaev/find-movie/blob/master/versions/find-movie-3.apk?raw=true)
