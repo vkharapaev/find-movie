@@ -17,8 +17,8 @@ The app uses several libraries including Dagger, Navigation, Exoplayer, RxJava, 
 - All transitions between screens are performed by means of Navigation component. All transitions are animated.
 - Some dependencies are provided by Dagger. It has app scope and screen scope to efficiently manage memory.
 
-# Apk (version 3)
-[![](https://github.com/vkharapaev/find-movie/blob/master/art/small_icon.png?raw=true)](https://github.com/vkharapaev/find-movie/blob/master/versions/find-movie-3.apk?raw=true)
+# Apk (version 4)
+[![](https://github.com/vkharapaev/find-movie/blob/master/art/small_icon.png?raw=true)](https://github.com/vkharapaev/find-movie/blob/master/versions/find-movie-4.apk?raw=true)
 
 # App screens
 ![](https://github.com/vkharapaev/find-movie/blob/master/art/screen1.jpg?raw=true)
