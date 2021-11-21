@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "com.headmostlab.findmovie",
+               "sha256_cert_fingerprints": ["6e:ae:31:df:c6:00:69:8b:9d:47:9f:f8:b9:f8:58:37:f7:c2:1e:d0:ab:3f:10:92:a9:84:b1:47:53:ed:3b:c9"] }
+}]
