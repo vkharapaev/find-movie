@@ -1,6 +1,7 @@
 package com.headmostlab.findmovie.di
 
 import android.content.Context
+import androidx.paging.ExperimentalPagingApi
 import androidx.room.Room
 import com.headmostlab.findmovie.data.datasource.local.RoomDb
 import com.headmostlab.findmovie.data.datasource.network.tmdb.*
@@ -41,6 +42,7 @@ abstract class AppModule {
     @Binds
     abstract fun provideRepository(repository: RepositoryImpl): Repository
 
+    @ExperimentalPagingApi
     @Binds
     abstract fun providePagingRepository(pagingRepository: PagingRepositoryImpl): PagingRepository
 

@@ -12,6 +12,7 @@ import io.reactivex.Flowable
 import javax.inject.Inject
 import kotlin.math.max
 
+@ExperimentalPagingApi
 class PagingRepositoryImpl @Inject constructor(
     private val service: TMDbApiService,
     private val db: RoomDb
@@ -21,7 +22,6 @@ class PagingRepositoryImpl @Inject constructor(
         private const val PAGE_SIZE = 20
     }
 
-    @ExperimentalPagingApi
     override fun getMovies(
         collectionId: Int,
         count: Int
